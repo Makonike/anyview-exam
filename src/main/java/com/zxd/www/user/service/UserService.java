@@ -1,0 +1,20 @@
+package com.zxd.www.user.service;
+
+import com.zxd.www.user.entity.UserEntity;
+
+/**
+ * @author Makonike
+ * @date 2021-10-12 14:38
+ **/
+public interface UserService {
+
+    boolean save(UserEntity userEntity);
+
+    UserEntity getByUserId(Integer userId);
+
+    UserEntity getByUserName(String userName);
+
+    boolean update(UserEntity userEntity);
+
+    boolean deleteBatch(Integer[] adminIds);
+}

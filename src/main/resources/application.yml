@@ -11,3 +11,9 @@ spring:
     port: 6379
     password: xxxxxx
 
+mybatis-plus:
+  mapper-locations: classpath:mybatis/mapper/*/*.xml
+  type-aliases-package: com.zxd.www.*.entity
+  configuration:
+    map-underscore-to-camel-case: true
+

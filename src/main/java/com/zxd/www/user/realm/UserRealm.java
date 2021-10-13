@@ -6,7 +6,6 @@ import com.zxd.www.global.util.JwtUtil;
 import com.zxd.www.global.util.RedisUtil;
 import com.zxd.www.user.entity.UserEntity;
 import com.zxd.www.user.entity.UserToken;
-import com.zxd.www.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -26,9 +25,6 @@ import org.springframework.util.StringUtils;
 @Component
 @Slf4j
 public class UserRealm extends AuthorizingRealm {
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private RedisUtil redisUtil;

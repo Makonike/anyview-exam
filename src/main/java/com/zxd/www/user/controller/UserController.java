@@ -57,7 +57,6 @@ public class UserController {
      * @param userEntity userEntity
      */
     private JsonResponse userInfo(UserEntity userEntity){
-        String userPassword = userEntity.getUserPassword();
         Integer userId = userEntity.getUserId();
 
         // 生成token

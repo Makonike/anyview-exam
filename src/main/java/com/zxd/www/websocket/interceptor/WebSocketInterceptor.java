@@ -1,15 +1,15 @@
 package com.zxd.www.websocket.interceptor;
 
-import cn.hutool.http.HttpUtil;
 import com.zxd.www.websocket.constant.WebSocketConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
-import java.nio.charset.StandardCharsets;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -25,9 +25,14 @@ public class WebSocketInterceptor implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) {
         log.info("===开始握手===");
-        Map<String, String> paramMap = HttpUtil.decodeParamMap(request.getURI().getQuery(), StandardCharsets.UTF_8);
-        String userId = paramMap.get(WebSocketConstant.USER_ID);
-        String groupId = paramMap.get(WebSocketConstant.GROUP_ID);
+        ServletServerHttpRequest req = (ServletServerHttpRequest) request;
+        HttpServletRequest servletRequest = req.getServletRequest();
+
+        String userId = servletRequest.getParameter(WebSocketConstant.USER_ID);
+        String groupId = servletRequest.getParameter(WebSocketConstant.GROUP_ID);
+        // TODO: 权限认证
+
+
         attributes.put(WebSocketConstant.USER_ID, userId);
         attributes.put(WebSocketConstant.GROUP_ID, groupId);
         return true;

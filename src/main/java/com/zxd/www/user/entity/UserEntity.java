@@ -15,6 +15,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserEntity {
 
+    /**
+     * 修改主键自增策略
+     * 插入user后，实体类的userid会被自动赋值
+     * 解决的是 完成某些操作还要去数据库查询userid的问题
+     */
     @TableId(type = IdType.AUTO)
     private Integer userId;
 

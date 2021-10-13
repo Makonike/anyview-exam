@@ -1,5 +1,6 @@
 package com.zxd.www.user.service;
 
+import com.zxd.www.user.entity.Student;
 import com.zxd.www.user.entity.UserEntity;
 
 /**
@@ -17,4 +18,6 @@ public interface UserService {
     boolean update(UserEntity userEntity);
 
     boolean deleteBatch(Integer[] adminIds);
+
+    Student getInfoById(Integer userId);
 }

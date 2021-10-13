@@ -1,6 +1,7 @@
 package com.zxd.www.user.service.impl;
 
 import com.zxd.www.global.util.StringUtil;
+import com.zxd.www.user.entity.Student;
 import com.zxd.www.user.entity.UserEntity;
 import com.zxd.www.user.mapper.UserMapper;
 import com.zxd.www.user.service.UserService;
@@ -54,7 +55,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean deleteBatch(Integer[] adminIds){
-            return false;
+        return false;
+    }
+
+    @Override
+    public Student getInfoById(Integer userId){
+        return userMapper.userInfo(userId);
     }
 
 

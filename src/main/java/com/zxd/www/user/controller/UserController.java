@@ -89,8 +89,7 @@ public class UserController {
     public JsonResponse info(){
         UserEntity userEntity = (UserEntity) SecurityUtils.getSubject().getPrincipal();
         Integer userId = userEntity.getUserId();
-        // TODO: 根据id查询stu信息然后返回
-        return new JsonResponse().message("用户信息").data(userEntity);
+        return new JsonResponse().message("查询用户信息成功！").data(userService.getInfoById(userId));
     }
 
 

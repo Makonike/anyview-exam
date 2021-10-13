@@ -1,6 +1,7 @@
 package com.zxd.www.user.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,6 +49,7 @@ public class Student {
     /**
      * 班级名
      */
+    @TableField(exist = false)
     private String className;
 
     /**

@@ -1,5 +1,6 @@
 package com.zxd.www.websocket.interceptor;
 
+import com.zxd.www.global.util.JwtUtil;
 import com.zxd.www.websocket.constant.WebSocketConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
@@ -28,10 +29,15 @@ public class WebSocketInterceptor implements HandshakeInterceptor {
         ServletServerHttpRequest req = (ServletServerHttpRequest) request;
         HttpServletRequest servletRequest = req.getServletRequest();
 
-        String userId = servletRequest.getParameter(WebSocketConstant.USER_ID);
         String groupId = servletRequest.getParameter(WebSocketConstant.GROUP_ID);
         // TODO: 权限认证
 
+        String token = servletRequest.getHeader("Sec-WebSocket-Protocol");
+        log.info(token);
+        Integer userId = JwtUtil.getUserId(token);
+        if(userId == null){
+            return false;
+        }
 
         attributes.put(WebSocketConstant.USER_ID, userId);
         attributes.put(WebSocketConstant.GROUP_ID, groupId);

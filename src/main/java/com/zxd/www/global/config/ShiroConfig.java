@@ -35,8 +35,12 @@ public class ShiroConfig {
         // 拦截器
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
+        // 排除登录接口
         filterChainDefinitionMap.put("/user/login", "anon");
         filterChainDefinitionMap.put("/user/info", "userFilter");
+
+        // 学生接口
+        filterChainDefinitionMap.put("/student/**", "userFilter");
 
         // 添加自己的过滤器并取名
         Map<String, Filter> filterMap = new HashMap<>(2);

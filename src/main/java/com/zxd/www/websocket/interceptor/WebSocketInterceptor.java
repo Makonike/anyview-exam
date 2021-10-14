@@ -1,6 +1,6 @@
 package com.zxd.www.websocket.interceptor;
 
-import com.zxd.www.global.util.JwtUtil;
+import com.zxd.www.user.util.JwtUtil;
 import com.zxd.www.websocket.constant.WebSocketConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;

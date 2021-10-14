@@ -1,4 +1,4 @@
-package com.zxd.www.global.util;
+package com.zxd.www.user.util;
 
 import com.zxd.www.global.constant.JwtConstant;
 import io.jsonwebtoken.Claims;

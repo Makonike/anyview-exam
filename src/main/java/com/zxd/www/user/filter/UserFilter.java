@@ -60,7 +60,7 @@ public class UserFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String token = httpServletRequest.getHeader(JwtConstant.TOKEN_HEADER_KEY);
+        String token = httpServletRequest.getHeader(JwtConstant.USER_TOKEN_HEADER_KEY);
 
         UserToken jwtToken = new UserToken(token);
         // 提交给realm进行登录，如果错误则会抛出异常并被捕获

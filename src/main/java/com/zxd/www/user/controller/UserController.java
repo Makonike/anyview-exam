@@ -6,7 +6,7 @@ import com.zxd.www.global.constant.JwtConstant;
 import com.zxd.www.global.constant.RedisConstant;
 import com.zxd.www.global.entity.dto.JsonResponse;
 import com.zxd.www.global.enums.ResultCode;
-import com.zxd.www.global.util.JwtUtil;
+import com.zxd.www.user.util.JwtUtil;
 import com.zxd.www.global.util.RedisUtil;
 import com.zxd.www.user.entity.UserEntity;
 import com.zxd.www.user.service.UserService;

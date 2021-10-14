@@ -2,7 +2,7 @@ package com.zxd.www.user.realm;
 
 import com.alibaba.fastjson.JSON;
 import com.zxd.www.global.constant.RedisConstant;
-import com.zxd.www.global.util.JwtUtil;
+import com.zxd.www.user.util.JwtUtil;
 import com.zxd.www.global.util.RedisUtil;
 import com.zxd.www.user.entity.UserEntity;
 import com.zxd.www.user.entity.UserToken;

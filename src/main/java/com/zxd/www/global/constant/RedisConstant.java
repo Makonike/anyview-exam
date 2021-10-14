@@ -8,4 +8,6 @@ public class RedisConstant {
 
     public static final String PREFIX_USER_INFO = "PREFIX_USER_INFO_";
 
+    public static final String PREFIX_ADMIN_INFO = "PREFIX_ADMIN_INFO_";
+
 }

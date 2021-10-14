@@ -55,8 +55,6 @@ public class JwtConstant {
 
     public final static String CLAIMS_ADMIN_ID_KEY = "adminId";
 
-//    public final static String CLAIMS_USERNAME_KEY = "userName";
-
     public final static String CLAIMS_ISS_KEY = "iss";
 
     public final static String USER_TOKEN_HEADER_KEY = "User-Token";

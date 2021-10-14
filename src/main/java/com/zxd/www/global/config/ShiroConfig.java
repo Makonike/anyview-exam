@@ -1,5 +1,7 @@
 package com.zxd.www.global.config;
 
+import com.zxd.www.sys.filter.AdminFilter;
+import com.zxd.www.sys.realm.AdminRealm;
 import com.zxd.www.user.filter.UserFilter;
 import com.zxd.www.user.realm.UserRealm;
 import org.apache.shiro.mgt.SecurityManager;
@@ -9,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -36,15 +39,22 @@ public class ShiroConfig {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
         // 排除登录接口
+        filterChainDefinitionMap.put("/sys/login", "anon");
+        filterChainDefinitionMap.put("/sys/unauthorized/**", "anon");
         filterChainDefinitionMap.put("/user/login", "anon");
         filterChainDefinitionMap.put("/user/info", "userFilter");
+        filterChainDefinitionMap.put("/user/unauthorized/**", "anon");
 
         // 学生接口
         filterChainDefinitionMap.put("/student/**", "userFilter");
 
+        // 管理员接口
+        filterChainDefinitionMap.put("/sys/info", "adminFilter");
+
         // 添加自己的过滤器并取名
         Map<String, Filter> filterMap = new HashMap<>(2);
         filterMap.put("userFilter", new UserFilter());
+        filterMap.put("adminFilter", new AdminFilter());
         // 设置过滤器
         shiroFilterFactoryBean.setFilters(filterMap);
 
@@ -53,18 +63,11 @@ public class ShiroConfig {
     }
 
     @Bean("securityManager")
-    public DefaultWebSecurityManager securityManager(UserRealm userRealm){
+    public DefaultWebSecurityManager securityManager(UserRealm userRealm, AdminRealm adminRealm){
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 
         // 设置realm
-        securityManager.setRealm(userRealm);
-
-//        // TODO: 关闭shiro自带的session
-//        DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
-//        DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
-//        defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
-//        subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
-//        securityManager.setSubjectDAO(subjectDAO);
+        securityManager.setRealms(Arrays.asList(adminRealm, userRealm));
 
         return securityManager;
     }

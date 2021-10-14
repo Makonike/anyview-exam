@@ -85,23 +85,18 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
             // 发送消息
             if(session.isOpen()){
                 // TODO: 备份至mysql
-                Map<String, WebSocketBean> sMap = WsSessionManager.get(groupId);
-                // 先判断本服务器端有无该用户session，如果有，则直接发，没有则广播session
-                if(sMap.containsKey(userId)){
-                    if(Objects.equals(groupId, userId)){
-                        batchSendMessage(groupId, message.getPayload());
-                    } else {
-                        sendMessageById(groupId, userId, message.getPayload());
-                    }
+                // 只要是群发都广播，否则就单发
+                if(Objects.equals(groupId, userId)){
+                    webSocketService.sendMessageAll(groupId, message.getPayload());
                 } else {
-                    // 如果groupId与userId相同就群发，否则单发
-                    if(Objects.equals(groupId, userId)){
-                        webSocketService.sendMessageAll(groupId, message.getPayload());
+                    Map<String, WebSocketBean> sMap = WsSessionManager.get(groupId);
+                    // 先判断本服务器端有无该用户session，如果有，则直接发，没有则广播session
+                    if(sMap.containsKey(userId)){
+                        sendMessageById(groupId, userId, message.getPayload());
                     } else {
                         webSocketService.sendMessageById(groupId, userId, message.getPayload());
                     }
                 }
-
             }
             // 清空错误计数
             cleanErrorNum(groupId, userId);

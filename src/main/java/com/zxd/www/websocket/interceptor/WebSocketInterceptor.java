@@ -1,5 +1,6 @@
 package com.zxd.www.websocket.interceptor;
 
+import com.zxd.www.sys.util.AdminJwtUtil;
 import com.zxd.www.user.util.JwtUtil;
 import com.zxd.www.websocket.constant.WebSocketConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -35,13 +36,21 @@ public class WebSocketInterceptor implements HandshakeInterceptor {
         String token = servletRequest.getHeader("Sec-WebSocket-Protocol");
         log.info(token);
         Integer userId = JwtUtil.getUserId(token);
-        if(userId == null){
-            return false;
+        // TODO: examId与userId不能冲突
+        // 如果是用户，就取出exam号存入groupId，将userId存入userId中
+        if(userId != null){
+            attributes.put(WebSocketConstant.USER_ID, userId);
+            attributes.put(WebSocketConstant.GROUP_ID, groupId);
+            return true;
         }
-
-        attributes.put(WebSocketConstant.USER_ID, userId);
-        attributes.put(WebSocketConstant.GROUP_ID, groupId);
-        return true;
+        // 如果是管理员，就取出exam号存入groupId，并将groupId存入userId中
+        Integer adminId = AdminJwtUtil.getAdminId(token);
+        if(adminId != null){
+            attributes.put(WebSocketConstant.USER_ID, groupId);
+            attributes.put(WebSocketConstant.GROUP_ID, groupId);
+            return true;
+        }
+        return false;
     }
 
     @Override

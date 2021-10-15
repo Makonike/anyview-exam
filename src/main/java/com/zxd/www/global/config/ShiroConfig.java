@@ -5,10 +5,14 @@ import com.zxd.www.sys.realm.AdminRealm;
 import com.zxd.www.user.filter.UserFilter;
 import com.zxd.www.user.realm.UserRealm;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 import javax.servlet.Filter;
 import java.util.Arrays;
@@ -51,6 +55,8 @@ public class ShiroConfig {
         // 管理员接口
         filterChainDefinitionMap.put("/sys/info", "adminFilter");
 
+        // 教师接口
+        filterChainDefinitionMap.put("/sys/teacher/update", "adminFilter");
         // 添加自己的过滤器并取名
         Map<String, Filter> filterMap = new HashMap<>(2);
         filterMap.put("userFilter", new UserFilter());
@@ -58,6 +64,8 @@ public class ShiroConfig {
         // 设置过滤器
         shiroFilterFactoryBean.setFilters(filterMap);
 
+        // <!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边 -->
+        filterChainDefinitionMap.put("/**", "adminFilter");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
@@ -72,6 +80,28 @@ public class ShiroConfig {
         return securityManager;
     }
 
+    /**
+     * 以下为添加注解支持
+     */
+    @Bean
+    @DependsOn("lifecycleBeanPostProcessor")
+    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
+        DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
+        return defaultAdvisorAutoProxyCreator;
+    }
+
+    @Bean
+    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+        advisor.setSecurityManager(securityManager);
+        return advisor;
+    }
 
 
 }

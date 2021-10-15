@@ -49,6 +49,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/user/info", "userFilter");
         filterChainDefinitionMap.put("/user/unauthorized/**", "anon");
 
+        // 排除ws连接接口
+        filterChainDefinitionMap.put("/exam/ws", "anon");
         // 学生接口
         filterChainDefinitionMap.put("/student/**", "userFilter");
 

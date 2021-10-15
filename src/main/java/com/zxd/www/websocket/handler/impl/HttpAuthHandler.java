@@ -1,5 +1,6 @@
 package com.zxd.www.websocket.handler.impl;
 
+import com.zxd.www.global.constant.CommonConstant;
 import com.zxd.www.websocket.bean.WebSocketBean;
 import com.zxd.www.websocket.config.WsSessionManager;
 import com.zxd.www.websocket.constant.WebSocketConstant;
@@ -55,10 +56,8 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
                 // 如果客户端未连接
                 beanMap.put(userId, bean);
                 log.info("组别：groupId:" + groupId + "，客户端userId:" + userId + "，连接服务器，当前连接数为：" + countUser(groupId));
-            } else {
-                // 如果客户端已连接，则不重复连接
-                log.info("组别groupId：" + groupId + "，客户端userId:" + userId + "，重复登录！");
-            }
+            }  // 如果客户端已连接，则不重复连接
+
         } else {
             // 不存在则创建
             // 用户id+session
@@ -80,6 +79,10 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         String groupId = (String) session.getAttributes().get(WebSocketConstant.GROUP_ID);
         String userId = (String) session.getAttributes().get(WebSocketConstant.USER_ID);
+        if(CommonConstant.PING.equals(message.getPayload())){
+            sendMessageById(groupId, userId, CommonConstant.PONG);
+            return ;
+        }
         log.info("组别groupId:" + groupId + "，连接数：" + countUser(groupId) + "，发送消息：" + message);
         try{
             // 发送消息
@@ -150,9 +153,9 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) {
         exception.printStackTrace();
-//        String userId = (String) session.getAttributes().get("userId");
-//        String groupId = (String) session.getAttributes().get("groupId");
-//        log.error("websocket发生错误==组别：" + groupId + "，客户端userId:" + userId, exception.getMessage());
+        String userId = (String) session.getAttributes().get("userId");
+        String groupId = (String) session.getAttributes().get("groupId");
+        log.error("websocket发生错误==组别：" + groupId + "，客户端userId:" + userId, exception.getMessage());
     }
 
     /**

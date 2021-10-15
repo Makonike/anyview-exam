@@ -8,4 +8,8 @@ public class CommonConstant {
 
     public static final Integer SUPER_ADMIN_ID = 1;
 
+    public static final String PING = "ping";
+
+    public static final String PONG = "pong";
+
 }

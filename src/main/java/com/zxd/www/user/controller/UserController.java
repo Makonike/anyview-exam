@@ -10,6 +10,7 @@ import com.zxd.www.user.util.JwtUtil;
 import com.zxd.www.global.util.RedisUtil;
 import com.zxd.www.user.entity.UserEntity;
 import com.zxd.www.user.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
  **/
 @RestController
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -46,7 +48,7 @@ public class UserController {
         if(!userEntity.getUserPassword().equals(userPassword)){
             return new JsonResponse(ResultCode.UNAUTHORIZED, "用户名或密码错误", null);
         }
-
+        log.info("用户:" + loginUser.getUserName() + "登录成功!");
         // 用户登录信息
         return userInfo(userEntity);
     }

@@ -11,6 +11,7 @@ import com.zxd.www.sys.entity.SysAdminEntity;
 import com.zxd.www.sys.service.ShiroService;
 import com.zxd.www.sys.service.SysAdminService;
 import com.zxd.www.sys.util.AdminJwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
  **/
 @RestController
 @RequestMapping("/sys")
+@Slf4j
 public class SysAdminController {
 
     @Autowired
@@ -50,6 +52,7 @@ public class SysAdminController {
             return new JsonResponse(ResultCode.UNAUTHORIZED, "用户名或密码错误", null);
         }
 
+        log.info("管理员:" + admin.getAdminName() + "登录成功！");
         return adminInfo(adminEntity);
     }
 

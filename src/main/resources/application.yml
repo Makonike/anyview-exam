@@ -16,4 +16,6 @@ mybatis-plus:
   type-aliases-package: com.zxd.www.*.entity
   configuration:
     map-underscore-to-camel-case: true
-
+server:
+  servlet:
+    context-path: /api

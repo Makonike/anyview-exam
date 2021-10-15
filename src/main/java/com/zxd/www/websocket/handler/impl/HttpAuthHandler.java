@@ -89,6 +89,7 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
                 if(Objects.equals(groupId, userId)){
                     webSocketService.sendMessageAll(groupId, message.getPayload());
                 } else {
+                    // 一般不会走这边，这里我打算把给单个用户发送信息封装成一个接口，也方便调用
                     Map<String, WebSocketBean> sMap = WsSessionManager.get(groupId);
                     // 先判断本服务器端有无该用户session，如果有，则直接发，没有则广播session
                     if(sMap.containsKey(userId)){

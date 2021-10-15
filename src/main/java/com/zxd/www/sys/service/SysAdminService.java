@@ -1,6 +1,7 @@
 package com.zxd.www.sys.service;
 
 import com.zxd.www.sys.entity.SysAdminEntity;
+import com.zxd.www.sys.entity.Teacher;
 
 import java.util.List;
 
@@ -19,5 +20,7 @@ public interface SysAdminService {
     List<SysAdminEntity> list();
 
     SysAdminEntity getById(Integer adminId);
+
+    Teacher teacherInfo(Integer adminId);
 
 }

@@ -85,13 +85,12 @@ public class SysAdminController {
     }
 
     /**
-     * TODO: 用来测试权限
-     * @return
+     * @return 管理员的教师信息
      */
     @GetMapping("/info")
     public JsonResponse info(){
         SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
-        return new JsonResponse().data(adminService.getById(admin.getAdminId()));
+        return new JsonResponse().data(adminService.teacherInfo(admin.getAdminId()));
     }
 
 }

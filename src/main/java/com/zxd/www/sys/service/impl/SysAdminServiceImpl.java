@@ -2,7 +2,9 @@ package com.zxd.www.sys.service.impl;
 
 import com.zxd.www.global.util.StringUtil;
 import com.zxd.www.sys.entity.SysAdminEntity;
+import com.zxd.www.sys.entity.Teacher;
 import com.zxd.www.sys.mapper.SysAdminMapper;
+import com.zxd.www.sys.mapper.TeacherMapper;
 import com.zxd.www.sys.service.SysAdminService;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class SysAdminServiceImpl implements SysAdminService {
 
     @Autowired
     private SysAdminMapper adminMapper;
+
+    @Autowired
+    private TeacherMapper teacherMapper;
 
     /**
      * 保存 admin
@@ -72,5 +77,10 @@ public class SysAdminServiceImpl implements SysAdminService {
     @Override
     public SysAdminEntity getById(Integer adminId) {
         return adminMapper.selectByAdminId(adminId);
+    }
+
+    @Override
+    public Teacher teacherInfo(Integer adminId) {
+        return teacherMapper.selectByAdminId(adminId);
     }
 }

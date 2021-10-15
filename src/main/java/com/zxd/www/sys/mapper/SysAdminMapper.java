@@ -1,6 +1,7 @@
 package com.zxd.www.sys.mapper;
 
 import com.zxd.www.sys.entity.SysAdminEntity;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,4 +24,7 @@ public interface SysAdminMapper{
     SysAdminEntity selectByAdminId(Integer adminId);
 
     SysAdminEntity selectByAdminName(String adminName);
+
+    boolean bindTeacherToAdmin(@Param(value = "adminId") Integer adminId
+            ,@Param(value = "roleId") Integer roleId);
 }

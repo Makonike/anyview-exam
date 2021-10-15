@@ -13,6 +13,7 @@ import com.zxd.www.sys.service.SysAdminService;
 import com.zxd.www.sys.util.AdminJwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -73,6 +74,30 @@ public class SysAdminController {
         JSONObject obj = new JSONObject();
         obj.put("token", token);
         return new JsonResponse().message("登录成功！").data(obj);
+    }
+
+    @PostMapping("/save")
+    @RequiresPermissions("sys:admin:save")
+    public JsonResponse save(@RequestBody SysAdminEntity admin){
+        if(adminService.save(admin)){
+            return new JsonResponse();
+        }
+        return new JsonResponse().badRequest().message("保存管理员信息失败！");
+    }
+
+    @DeleteMapping("/delete/{adminId}")
+    @RequiresPermissions("sys:admin:delete")
+    public JsonResponse delete(@PathVariable("adminId") Integer adminId){
+        if(adminService.delete(adminId)){
+            return new JsonResponse();
+        }
+        return new JsonResponse().notFound().message("删除失败，未找到该管理员信息!");
+    }
+
+    @GetMapping("/list")
+    @RequiresPermissions("sys:admin:list")
+    public JsonResponse list(){
+        return new JsonResponse().data(adminService.list());
     }
 
     /**

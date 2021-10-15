@@ -44,4 +44,11 @@
         where `admin_id` = #{adminId}
     </update>
 
+    <!-- boolean bindTeacherToAdmin(Integer adminId, Integer roleId); -->
+    <insert id="bindTeacherToAdmin">
+        insert into `conn_admin_role`
+        (`admin_id`, `role_id`)
+        values(#{adminId}, #{roleId})
+    </insert>
+
 </mapper>

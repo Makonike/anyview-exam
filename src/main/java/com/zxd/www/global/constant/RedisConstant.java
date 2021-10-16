@@ -6,8 +6,8 @@ package com.zxd.www.global.constant;
  **/
 public class RedisConstant {
 
-    public static final String PREFIX_USER_INFO = "PREFIX_USER_INFO_";
+    public static final String PREFIX_USER_INFO = "USER_INFO_";
 
-    public static final String PREFIX_ADMIN_INFO = "PREFIX_ADMIN_INFO_";
+    public static final String PREFIX_ADMIN_INFO = "ADMIN_INFO_";
 
 }

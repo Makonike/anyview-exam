@@ -18,6 +18,8 @@ public class WebSocketConstant {
 
     public static final String GROUP_ID = "groupId";
 
+    public static final String ADMIN_GROUP_ID = "admin group";
+
     public static final String SEND_ONE_METHOD_NAME = "sendMsg";
 
     public static final String SEND_ALL_METHOD_NAME = "sendAllMsg";

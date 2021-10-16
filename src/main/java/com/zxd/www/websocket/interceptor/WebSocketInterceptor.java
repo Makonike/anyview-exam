@@ -1,5 +1,6 @@
 package com.zxd.www.websocket.interceptor;
 
+import com.zxd.www.clazz.service.ClassService;
 import com.zxd.www.exam.service.ExamService;
 import com.zxd.www.sys.util.AdminJwtUtil;
 import com.zxd.www.user.util.JwtUtil;
@@ -27,11 +28,10 @@ import java.util.Map;
 public class WebSocketInterceptor implements HandshakeInterceptor {
 
     @Autowired
-    private ExamService examService;
+    private ClassService classService;
 
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) {
-        log.info("===开始握手===");
         ServletServerHttpRequest req = (ServletServerHttpRequest) request;
         HttpServletRequest servletRequest = req.getServletRequest();
 
@@ -40,18 +40,18 @@ public class WebSocketInterceptor implements HandshakeInterceptor {
         log.info(token);
         Integer userId = JwtUtil.getUserId(token);
 
-        // 如果是用户，就取出exam号存入groupId，将userId存入userId中, 取出的groupId为examNo，string
+        // 如果是用户，就取出班级号存入groupId，将userId存入userId中
         if(userId != null){
             attributes.put(WebSocketConstant.USER_ID, userId.toString());
-            attributes.put(WebSocketConstant.GROUP_ID, examService.getExamNoByUserId(userId));
+            attributes.put(WebSocketConstant.GROUP_ID, classService.getClassIdByUserId(userId).toString());
             return true;
         }
-        // 如果是管理员，就取出exam号存入groupId，并将groupId存入userId中
+
+        // 如果是管理员，就将管理员放到专属管理员group里，并将adminId存入userId中
         Integer adminId = AdminJwtUtil.getAdminId(token);
         if(adminId != null){
-            String groupId = examService.getExamNoByAdminId(adminId);
-            attributes.put(WebSocketConstant.USER_ID, groupId);
-            attributes.put(WebSocketConstant.GROUP_ID, groupId);
+            attributes.put(WebSocketConstant.USER_ID, adminId.toString());
+            attributes.put(WebSocketConstant.GROUP_ID, WebSocketConstant.ADMIN_GROUP_ID);
             return true;
         }
         return false;
@@ -59,6 +59,5 @@ public class WebSocketInterceptor implements HandshakeInterceptor {
 
     @Override
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
-        log.info("===握手完成===");
     }
 }

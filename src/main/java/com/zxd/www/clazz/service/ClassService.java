@@ -24,6 +24,8 @@ public interface ClassService {
 
     List<ClassEntity> getList();
 
+    List<Integer> getExamClass(Integer adminId);
+
 
 
 }

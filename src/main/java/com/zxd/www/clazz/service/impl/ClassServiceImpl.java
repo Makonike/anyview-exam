@@ -34,6 +34,10 @@ public class ClassServiceImpl implements ClassService {
         return classMapper.delete(classId);
     }
 
+    /**
+     * 获取当前学生所在班级号
+     * @param userId 用户id
+     */
     @Override
     public Integer getClassIdByUserId(Integer userId) {
         return classMapper.selectClassIdByUserId(userId);
@@ -52,5 +56,14 @@ public class ClassServiceImpl implements ClassService {
     @Override
     public List<ClassEntity> getList() {
         return classMapper.selectList();
+    }
+
+    /**
+     * 查找当前教师进行测验的班级号
+     * @param adminId 管理员id
+     */
+    @Override
+    public List<Integer> getExamClass(Integer adminId) {
+        return classMapper.getExamClass(adminId);
     }
 }

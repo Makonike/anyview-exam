@@ -27,4 +27,6 @@ public interface ClassMapper {
 
     List<ClassEntity> selectList();
 
+    List<Integer> getExamClass(Integer adminId);
+
 }

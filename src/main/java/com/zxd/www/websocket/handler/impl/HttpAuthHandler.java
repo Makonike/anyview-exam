@@ -1,5 +1,6 @@
 package com.zxd.www.websocket.handler.impl;
 
+import com.zxd.www.clazz.service.ClassService;
 import com.zxd.www.global.constant.CommonConstant;
 import com.zxd.www.websocket.bean.WebSocketBean;
 import com.zxd.www.websocket.config.WsSessionManager;
@@ -15,6 +16,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -36,6 +38,9 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
 
     @Autowired
     private WebSocketService webSocketService;
+
+    @Autowired
+    private ClassService classService;
 
     /**
      * 在 socket 连接成功后被触发，同原生注解里的 @OnOpen 功能
@@ -79,27 +84,20 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         String groupId = (String) session.getAttributes().get(WebSocketConstant.GROUP_ID);
         String userId = (String) session.getAttributes().get(WebSocketConstant.USER_ID);
+        // 心跳机制
         if(CommonConstant.PING.equals(message.getPayload())){
             sendMessageById(groupId, userId, CommonConstant.PONG);
             return ;
         }
         log.info("组别groupId:" + groupId + "，连接数：" + countUser(groupId) + "，发送消息：" + message);
         try{
-            // 发送消息
+            // 发送消息，这里指的是 老师向学生客户端发送公告 TODO:设计为接口, 然后onMessage就打算只用来做心跳机制返回pong
             if(session.isOpen()){
                 // TODO: 备份至mysql
-                // 只要是群发都广播，否则就单发
-                if(Objects.equals(groupId, userId)){
-                    webSocketService.sendMessageAll(groupId, message.getPayload());
-                } else {
-                    // 一般不会走这边，这里我打算把给单个用户发送信息封装成一个接口，也方便调用
-                    Map<String, WebSocketBean> sMap = WsSessionManager.get(groupId);
-                    // 先判断本服务器端有无该用户session，如果有，则直接发，没有则广播session
-                    if(sMap.containsKey(userId)){
-                        sendMessageById(groupId, userId, message.getPayload());
-                    } else {
-                        webSocketService.sendMessageById(groupId, userId, message.getPayload());
-                    }
+                List<Integer> examClass = classService.getExamClass(Integer.parseInt(userId));
+                // 向参与测试的班级群发消息
+                for (Integer aClass : examClass) {
+                    webSocketService.sendMessageAll(aClass.toString(), message.getPayload());
                 }
             }
             // 清空错误计数
@@ -159,7 +157,7 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
     }
 
     /**
-     * 计算当前连接数
+     * 计算当前服务器上的连接数
      * @param groupId groupId
      */
     private Integer countUser(String groupId){

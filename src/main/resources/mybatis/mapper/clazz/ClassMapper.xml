@@ -3,14 +3,14 @@
 <mapper namespace="com.zxd.www.clazz.mapper.ClassMapper">
 
     <!-- boolean insert(ClassEntity classEntity); -->
-    <insert id="insert" useGeneratedKeys="true" keyProperty="classId">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="classId" parameterType="com.zxd.www.clazz.entity.ClassEntity">
         insert into `t_class`
         (`class_id`, `class_name`, `school_id`, `institute_id`, `grade_id`, `class_desc`)
         values(#{classId}, #{className}, #{schoolId}, #{instituteId}, #{gradeId}, #{classDesc})
     </insert>
 
     <!-- boolean update(ClassEntity classEntity); -->
-    <update id="update">
+    <update id="update" parameterType="com.zxd.www.clazz.entity.ClassEntity">
         update `t_class`
         set `class_name` = #{className}, `school_id` = #{schoolId}, `institute_id` = #{instituteId}, `grade_id` = #{gradeId}
         , `class_desc` = #{classDesc}
@@ -19,7 +19,7 @@
     </update>
 
     <!-- boolean delete(Integer classId); -->
-    <update id="delete">
+    <update id="delete" parameterType="java.lang.Integer">
         update `t_class`
         set `removed` = 1
         where `class_id` = #{classId}
@@ -42,7 +42,7 @@
     </select>
 
     <!-- ClassEntity selectByClassId(Integer classId); -->
-    <select id="selectByClassId" resultType="com.zxd.www.clazz.entity.ClassEntity">
+    <select id="selectByClassId" resultType="com.zxd.www.clazz.entity.ClassEntity" parameterType="java.lang.Integer">
         select tc.`class_id`, `class_name`, tc.`school_id`, `school_name`, tc.`institute_id`, `institute_name`
              ,tc.`grade_id`, `grade_name`, `create_time`, `class_desc`
         from `t_class` tc
@@ -68,6 +68,18 @@
         left join `t_grade` tg
         on tc.`grade_id` = tg.`grade_id`
         where tc.`removed` = 0
+    </select>
+
+    <!-- List<Integer> getExamClass(Integer adminId); -->
+    <select id="getExamClass" resultType="java.lang.Integer">
+        select `class_id`
+        from `conn_exam_class` cec
+        left join `t_exam` te
+        on cec.`exam_id` = te.`exam_id`
+        left join `t_teacher` tt
+        on te.`teacher_id` = tt.`teacher_id`
+        where tt.`admin_id` = #{adminId}
+        and te.`status` in (0, 1, 2)
     </select>
 
 

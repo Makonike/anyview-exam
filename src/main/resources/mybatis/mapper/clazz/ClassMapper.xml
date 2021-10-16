@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.www.clazz.mapper.ClassMapper">
+
+    <!-- boolean insert(ClassEntity classEntity); -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="classId">
+        insert into `t_class`
+        (`class_id`, `class_name`, `school_id`, `institute_id`, `grade_id`, `class_desc`)
+        values(#{classId}, #{className}, #{schoolId}, #{instituteId}, #{gradeId}, #{classDesc})
+    </insert>
+
+    <!-- boolean update(ClassEntity classEntity); -->
+    <update id="update">
+        update `t_class`
+        set `class_name` = #{className}, `school_id` = #{schoolId}, `institute_id` = #{instituteId}, `grade_id` = #{gradeId}
+        , `class_desc` = #{classDesc}
+        where `class_id` = #{classId}
+        and `removed` = 0
+    </update>
+
+    <!-- boolean delete(Integer classId); -->
+    <update id="delete">
+        update `t_class`
+        set `removed` = 1
+        where `class_id` = #{classId}
+        and `removed` = 0
+    </update>
+
+    <!-- boolean bindClassToExam(Integer classId, Integer examId); -->
+    <insert id="bindClassToExam">
+        insert into `conn_exam_class`
+        (`class_id`, `exam_id`)
+        values(#{classId}, #{examId})
+    </insert>
+
+    <!-- Integer selectClassIdByUserId(Integer userId); -->
+    <select id="selectClassIdByUserId" resultType="java.lang.Integer">
+        select `class_id`
+        from `t_student`
+        where `user_id` = #{userId}
+        and `removed` = 0
+    </select>
+
+    <!-- ClassEntity selectByClassId(Integer classId); -->
+    <select id="selectByClassId" resultType="com.zxd.www.clazz.entity.ClassEntity">
+        select tc.`class_id`, `class_name`, tc.`school_id`, `school_name`, tc.`institute_id`, `institute_name`
+             ,tc.`grade_id`, `grade_name`, `create_time`, `class_desc`
+        from `t_class` tc
+        left join `t_school` ts
+        on tc.`school_id` = ts.`school_id`
+        left join `t_institute` ti
+        on tc.`institute_id` = ti.`institute_id`
+        left join `t_grade` tg
+        on tc.`grade_id` = tg.`grade_id`
+        where tc.`class_id` = #{classId}
+        and tc.`removed` = 0
+    </select>
+
+    <!-- List<ClassEntity> selectList(); -->
+    <select id="selectList" resultType="com.zxd.www.clazz.entity.ClassEntity">
+        select tc.`class_id`, `class_name`, tc.`school_id`, `school_name`, tc.`institute_id`, `institute_name`
+             ,tc.`grade_id`, `grade_name`, `create_time`, `class_desc`
+        from `t_class` tc
+        left join `t_school` ts
+        on tc.`school_id` = ts.`school_id`
+        left join `t_institute` ti
+        on tc.`institute_id` = ti.`institute_id`
+        left join `t_grade` tg
+        on tc.`grade_id` = tg.`grade_id`
+        where tc.`removed` = 0
+    </select>
+
+
+</mapper>

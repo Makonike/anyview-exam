@@ -40,9 +40,4 @@ public class SysAdminEntity {
      */
     private String salt;
 
-    /**
-     * 管理员角色id列表
-     */
-    @TableField(exist = false)
-    private List<Integer> roleIdList;
 }

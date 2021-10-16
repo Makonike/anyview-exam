@@ -14,6 +14,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -27,6 +28,7 @@ import org.springframework.util.StringUtils;
 public class UserRealm extends AuthorizingRealm {
 
     @Autowired
+    @Lazy
     private RedisUtil redisUtil;
 
     @Override

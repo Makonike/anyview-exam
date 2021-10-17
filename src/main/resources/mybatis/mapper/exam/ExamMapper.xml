@@ -2,26 +2,88 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zxd.www.exam.mapper.ExamMapper">
 
-    <!-- String getExamNoByUserId(Integer userId); -->
-    <select id="getExamNoByUserId" resultType="java.lang.String" parameterType="Integer">
-        select te.`exam_no`
-        from `t_exam` te
-        left join `conn_exam_class` cec
-        on te.`exam_id` = cec.`exam_id`
-        left join `t_student` ts
-        on cec.`class_id` = ts.`class_id`
-        where ts.`user_id` = #{userId}
-        and te.`status` in (0, 1, 2)
+    <!-- boolean autoExamSave(Exam exam); -->
+    <update id="autoExamSave" parameterType="com.zxd.www.exam.entity.Exam">
+        update `t_exam`
+        set `setup_time` = #{setupTime},`start_time` = #{startTime},`exam_time` = #{examTime}, `exp_time` = #{expTime}
+        where `exam_id` = #{examId}
+        and `status` = 0
+    </update>
+
+    <!-- boolean examSave(Exam exam); -->
+    <insert id="examSave" useGeneratedKeys="true" keyProperty="examId" parameterType="com.zxd.www.exam.entity.Exam">
+        insert into `t_exam`
+        (`exam_id`, `teacher_id`)
+        values(#{examId}, #{teacherId})
+    </insert>
+
+    <!-- boolean examSetUp(Exam exam); -->
+    <update id="examSetUp" parameterType="com.zxd.www.exam.entity.Exam">
+        update `t_exam`
+        set `setup_time` = #{setupTime}, `start_time` = #{startTime}, `exam_time` = #{examTime}, `exp_time` = #{expTime}, `status` = 1
+        where `exam_id` = #{examId}
+        and `status` = 0
+    </update>
+
+    <!-- boolean examStart(Exam exam); -->
+    <update id="examStart" parameterType="com.zxd.www.exam.entity.Exam">
+        update `t_exam`
+        set `status` = 2, `start_time` = #{start_time}, `exp_time` = #{expTime}
+        where `exam_id` = #{examId}
+        and `status` = 1
+    </update>
+
+    <!-- boolean examStop(Exam exam) -->
+    <update id="examStop" parameterType="com.zxd.www.exam.entity.Exam">
+        update `t_exam`
+        set `status` = 3, `exam_time` = #{examTime} , `exp_time` = #{expTime}
+        where `exam_id` = #{examId}
+        and `status` = 2
+    </update>
+
+    <!-- boolean examDelay(Exam exam); -->
+    <update id="examDelay" parameterType="com.zxd.www.exam.entity.Exam">
+        update `t_exam`
+        set `exam_time` = #{examTime}, `exp_time` = #{expTime}
+        where `exam_id` = #{examId}
+        and `status` = 2
+    </update>
+
+    <!-- boolean autoExamStart(Exam exam); -->
+    <update id="autoExamStart">
+        update `t_exam`
+        set `status` = 2
+        where `exam_id` = #{examId}
+        and `status` = 1
+    </update>
+
+    <!-- boolean autoExamStop(Integer examId); -->
+    <update id="autoExamStop">
+        update `t_exam`
+        set `status` = 3
+        where `exam_id` = #{examId}
+        and `status` = 2
+    </update>
+
+    <!-- Exam getByExamId(Integer examId); -->
+    <select id="getByExamId" resultType="com.zxd.www.exam.entity.Exam">
+        select `exam_id`, `teacher_id`, `setup_time`, `start_time`, `exam_time`, `status`
+        from `t_exam`
+        where `exam_id` = #{examId}
     </select>
 
-    <!-- String getExamNoByAdminId(Integer adminId); -->
-    <select id="getExamNoByAdminId" resultType="java.lang.String" parameterType="Integer">
-        select `exam_no`
-        from `t_exam` te
-        left join `t_teacher` tt
-        on te.`teacher_id` = tt.`teacher_id`
-        where tt.`admin_id` = #{adminId}
+    <!-- Integer countExamPeriod(Integer classId, LocalDateTime setupTime, LocalDateTime expTime); -->
+    <select id="countExamPeriod" resultType="java.lang.Integer">
+        SELECT count(te.`exam_id`)
+        FROM `t_exam` te
+        left join `conn_exam_class` cec
+        on te.`exam_id` = cec.`exam_id`
+        where cec.`class_id` = #{classId}
         and te.`status` in (0, 1, 2)
+        and ((TIMESTAMPDIFF(SECOND, te.`setup_time`, #{setupTime}) &lt;= 0
+        and TIMESTAMPDIFF(SECOND, te.`exp_time`, #{expTime}) &gt;= 0)
+        or #{setupTime} BETWEEN te.`setup_time` and te.`exp_time`
+        or #{expTime} BETWEEN te.`setup_time` and te.`exp_time`)
     </select>
 
 

@@ -72,6 +72,12 @@ public class ShiroConfig {
 
         // 教师接口
         filterChainDefinitionMap.put("/sys/teacher/update", "adminFilter");
+        // 测验接口
+        filterChainDefinitionMap.put("/exam/delay/**", "adminFilter");
+        filterChainDefinitionMap.put("/exam/autoSave", "adminFilter");
+        filterChainDefinitionMap.put("/exam/save", "adminFilter");
+
+        
         // 添加自己的过滤器并取名
         Map<String, Filter> filterMap = new HashMap<>(2);
         filterMap.put("userFilter", new UserFilter());

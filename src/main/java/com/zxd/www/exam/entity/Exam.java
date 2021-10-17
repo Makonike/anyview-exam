@@ -1,12 +1,14 @@
 package com.zxd.www.exam.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 测验实体类
@@ -23,10 +25,7 @@ public class Exam {
      */
     @TableId(type = IdType.AUTO)
     private Integer examId;
-    /**
-     * 测验编号
-     */
-    private String examNo;
+
     /**
      * 发布教师id
      */
@@ -43,9 +42,17 @@ public class Exam {
      * 测验时长
      */
     private Integer examTime;
+
+    /**
+     * 结束时间
+     */
+    private LocalDateTime expTime;
     /**
      * 测验状态，0-未开始，1-准备，2-进行中，3-已结束
      */
     private Integer status;
+
+    @TableField(exist = false)
+    private List<Integer> classIds;
 
 }

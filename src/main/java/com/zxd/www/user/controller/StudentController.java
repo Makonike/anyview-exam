@@ -27,7 +27,7 @@ public class StudentController {
         return new JsonResponse().data(studentService.getByStudentNo(studentNo));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public JsonResponse findByStudentId(@PathVariable("id") Integer studentId){
         return new JsonResponse().data(studentService.getByStudentId(studentId));
     }
@@ -48,6 +48,20 @@ public class StudentController {
             return new JsonResponse();
         }
         return new JsonResponse().unauthorized().message("更新失败,请登录后再试");
+    }
+
+    @GetMapping("/list")
+    public JsonResponse list(){
+        return new JsonResponse().data(studentService.getStudentList());
+    }
+
+    @PostMapping("/save")
+    public JsonResponse save(@RequestBody Student student, @RequestParam("userId") Integer userId){
+        boolean bind = studentService.save(student, userId);
+        if(bind){
+            return new JsonResponse();
+        }
+        return new JsonResponse().unauthorized().message("保存失败,未找到该用户");
     }
 
 }

@@ -4,6 +4,7 @@ import com.zxd.www.user.entity.Student;
 import com.zxd.www.user.entity.UserEntity;
 import com.zxd.www.user.mapper.StudentMapper;
 import com.zxd.www.user.service.StudentService;
+import com.zxd.www.user.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private StudentMapper studentMapper;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 用户绑定
@@ -37,7 +41,13 @@ public class StudentServiceImpl implements StudentService {
      * @param student student
      */
     @Override
-    public boolean save(Student student) {
+    public boolean save(Student student, Integer userId) {
+        UserEntity user = userService.getByUserId(userId);
+        if(user == null){
+            return false;
+        }
+        student.setUserId(userId);
+        student.setStudentNo(user.getUserName());
         return studentMapper.insertStudent(student);
     }
 

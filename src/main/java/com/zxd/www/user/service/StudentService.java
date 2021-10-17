@@ -13,7 +13,7 @@ public interface StudentService {
 
     boolean bind(Student student);
 
-    boolean save(Student student);
+    boolean save(Student student, Integer userId);
 
     Student getByStudentNo(String studentNo);
 

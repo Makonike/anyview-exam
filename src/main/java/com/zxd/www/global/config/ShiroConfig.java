@@ -44,15 +44,28 @@ public class ShiroConfig {
 
         // 排除登录接口
         filterChainDefinitionMap.put("/sys/login", "anon");
-        filterChainDefinitionMap.put("/sys/unauthorized/**", "anon");
         filterChainDefinitionMap.put("/user/login", "anon");
-        filterChainDefinitionMap.put("/user/info", "userFilter");
+
+        // 排除异常接口
         filterChainDefinitionMap.put("/user/unauthorized/**", "anon");
+        filterChainDefinitionMap.put("/sys/unauthorized/**", "anon");
 
         // 排除ws连接接口
         filterChainDefinitionMap.put("/exam/ws", "anon");
+
+        // 用户接口
+        filterChainDefinitionMap.put("/user/info", "userFilter");
+        filterChainDefinitionMap.put("/user/update", "userFilter");
+        filterChainDefinitionMap.put("/user/save", "adminFilter");
+        filterChainDefinitionMap.put("/user/id/**", "adminFilter");
+
         // 学生接口
-        filterChainDefinitionMap.put("/student/**", "userFilter");
+        filterChainDefinitionMap.put("/student/no", "userFilter");
+        filterChainDefinitionMap.put("/student/id/**", "userFilter");
+        filterChainDefinitionMap.put("/student/update", "userFilter");
+        filterChainDefinitionMap.put("/student/bind", "userFilter");
+        filterChainDefinitionMap.put("/student/list", "adminFilter");
+        filterChainDefinitionMap.put("/student/save", "adminFilter");
 
         // 管理员接口
         filterChainDefinitionMap.put("/sys/info", "adminFilter");

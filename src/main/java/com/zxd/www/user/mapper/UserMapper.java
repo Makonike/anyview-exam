@@ -4,6 +4,8 @@ import com.zxd.www.user.entity.Student;
 import com.zxd.www.user.entity.UserEntity;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Makonike
  * @date 2021-10-12 14:37

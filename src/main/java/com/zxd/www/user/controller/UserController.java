@@ -94,5 +94,26 @@ public class UserController {
         return new JsonResponse().message("查询用户信息成功！").data(userService.getInfoById(userId));
     }
 
+    @PostMapping("/save")
+    public JsonResponse save(@RequestBody UserEntity userEntity){
+        if(userService.save(userEntity)){
+            return new JsonResponse();
+        }
+        return new JsonResponse().badRequest().message("保存失败");
+    }
+
+    @PutMapping("/update")
+    public JsonResponse update(@RequestBody UserEntity userEntity){
+        if(userService.update(userEntity)){
+            return new JsonResponse();
+        }
+        return new JsonResponse().notFound().message("更新失败，未找到该用户信息！");
+    }
+
+    @GetMapping("/id/{userId}")
+    public JsonResponse getByUserId(@PathVariable("userId") Integer userId){
+        return new JsonResponse().data(userService.getByUserId(userId));
+    }
+
 
 }

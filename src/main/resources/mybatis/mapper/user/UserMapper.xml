@@ -21,7 +21,7 @@
 
     <!-- UserEntity selectByUserId(Integer userId); -->
     <select id="selectByUserId" parameterType="Integer" resultType="com.zxd.www.user.entity.UserEntity">
-        select `user_id`, `user_name`, `user_password`, `salt`
+        select `user_id`, `user_name`
         from `t_user`
         where `user_id` = #{userId}
     </select>
@@ -36,7 +36,7 @@
 
     <!-- boolean update(UserEntity userEntity); -->
     <update id="update" parameterType="com.zxd.www.user.entity.UserEntity" >
-        update `t_user` set `user_password` = #{userEntity.userPassword}
+        update `t_user` set `user_password` = #{userPassword}
         where `user_id` = #{userId}
     </update>
 

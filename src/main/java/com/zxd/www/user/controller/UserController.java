@@ -112,7 +112,7 @@ public class UserController {
 
     @GetMapping("/id/{userId}")
     public JsonResponse getByUserId(@PathVariable("userId") Integer userId){
-        return new JsonResponse().data(userService.getByUserId(userId));
+        return new JsonResponse().data(userService.getInfoById(userId));
     }
 
 

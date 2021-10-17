@@ -56,7 +56,6 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
         // 如果存在则加入
         if(beanMap != null){
             WebSocketBean stu = beanMap.get(userId);
-            //
             if(stu == null){
                 // 如果客户端未连接
                 beanMap.put(userId, bean);
@@ -129,10 +128,6 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
         String groupId = (String) session.getAttributes().get(WebSocketConstant.GROUP_ID);
         Map<String, WebSocketBean> map = WsSessionManager.get(groupId);
 
-        // 清空session
-//        if(remove){
-//            log.info("组别groupId:" + groupId + "客户端userId：" + userId +"，断开与服务器连接");
-//        }
         // 学生关闭客户端
         if(map != null){
             WebSocketBean remove = map.remove(userId);

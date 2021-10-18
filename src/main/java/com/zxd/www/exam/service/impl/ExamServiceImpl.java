@@ -181,7 +181,7 @@ public class ExamServiceImpl implements ExamService {
     public boolean autoExamStart(Integer examId){
         Exam exam = getByExamId(examId);
         if(examMapper.autoExamStart(examId)){
-            Duration between = Duration.between(LocalDateTime.now(), exam.getStartTime());
+            Duration between = Duration.between(LocalDateTime.now(), exam.getExpTime());
             redisUtil.set(RedisConstant.PREFIX_EXAM_STOP + exam.getExamId().toString(), 1, between.toMillis() / 1000);
             noticeStudent("测验开始");
             return true;

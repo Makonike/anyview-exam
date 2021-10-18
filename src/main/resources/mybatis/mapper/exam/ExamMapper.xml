@@ -28,7 +28,7 @@
     <!-- boolean examStart(Exam exam); -->
     <update id="examStart" parameterType="com.zxd.www.exam.entity.Exam">
         update `t_exam`
-        set `status` = 2, `start_time` = #{start_time}, `exp_time` = #{expTime}
+        set `status` = 2, `start_time` = #{startTime}, `exp_time` = #{expTime}
         where `exam_id` = #{examId}
         and `status` = 1
     </update>
@@ -49,7 +49,7 @@
         and `status` = 2
     </update>
 
-    <!-- boolean autoExamStart(Exam exam); -->
+    <!-- boolean autoExamStart(Integer examId); -->
     <update id="autoExamStart">
         update `t_exam`
         set `status` = 2
@@ -63,6 +63,14 @@
         set `status` = 3
         where `exam_id` = #{examId}
         and `status` = 2
+    </update>
+
+    <!-- boolean autoExamSetUp(Integer examId); -->
+    <update id="autoExamSetUp">
+        update `t_exam`
+        set `status` = 1
+        where `exam_id` = #{examId}
+        and `status` = 0
     </update>
 
     <!-- Exam getByExamId(Integer examId); -->

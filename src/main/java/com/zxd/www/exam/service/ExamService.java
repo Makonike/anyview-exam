@@ -27,6 +27,12 @@ public interface ExamService {
     boolean examSetUp(Exam exam);
 
     /**
+     * 自动测验准备
+     * @param examId 测验id
+     */
+    boolean autoExamSetUp(Integer examId);
+
+    /**
      * 手动测验开始
      * @param examId 测验id
      */

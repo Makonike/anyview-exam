@@ -32,6 +32,12 @@ public interface ExamMapper {
     boolean examSetUp(Exam exam);
 
     /**
+     * 自动测验准备
+     * @param examId 测验id
+     */
+    boolean autoExamSetUp(Integer examId);
+
+    /**
      * 手动测验开始
      * @param exam 测验
      */
@@ -39,9 +45,9 @@ public interface ExamMapper {
 
     /**
      * 自动开启测验
-     * @param exam
+     * @param examId 测试id
      */
-    boolean autoExamStart(Exam exam);
+    boolean autoExamStart(Integer examId);
 
     /**
      * 自动测验结束

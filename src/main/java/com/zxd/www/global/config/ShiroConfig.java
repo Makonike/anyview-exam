@@ -76,6 +76,9 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/exam/delay/**", "adminFilter");
         filterChainDefinitionMap.put("/exam/autoSave", "adminFilter");
         filterChainDefinitionMap.put("/exam/save", "adminFilter");
+        filterChainDefinitionMap.put("/exam/setUp", "adminFilter");
+        filterChainDefinitionMap.put("/exam/start/**", "adminFilter");
+        filterChainDefinitionMap.put("/exam/stop/**", "adminFilter");
 
         
         // 添加自己的过滤器并取名

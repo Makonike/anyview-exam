@@ -11,6 +11,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -76,11 +77,13 @@ public class ExamServiceImpl implements ExamService {
         SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
         // 设置发布教师
         exam.setTeacherId(teacherMapper.selectByAdminId(admin.getAdminId()).getTeacherId());
-        examMapper.examSave(exam);
-        for (Integer classId : exam.getClassIds()) {
-            classService.bindClassToExam(classId, exam.getExamId());
+        if (examMapper.examSave(exam)) {
+            for (Integer classId : exam.getClassIds()) {
+                classService.bindClassToExam(classId, exam.getExamId());
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -91,6 +94,41 @@ public class ExamServiceImpl implements ExamService {
      */
     @Override
     public boolean examSetUp(Exam exam) {
+
+        if(exam.getStartTime().isBefore(LocalDateTime.now())){
+            return false;
+        }
+
+        exam.setSetupTime(LocalDateTime.now());
+        exam.setExpTime(exam.getStartTime().plusMinutes(exam.getExamTime()));
+        SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
+        // 排除冲突
+        List<Integer> examClass = classService.getExamClass(admin.getAdminId());
+        for (Integer aClass : examClass) {
+            // 遍历列表，获取班级的所有测验安排
+            if(examMapper.countExamPeriod(aClass, exam.getSetupTime(), exam.getExpTime()) > 0){
+                return false;
+            }
+        }
+        if (examMapper.examSetUp(exam)) {
+            for (Integer aClass : examClass) {
+                webSocketService.sendMessageAll(aClass.toString(), "测试准备开始!");
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 自动测验准备
+     * @param examId 测验id
+     */
+    @Override
+    public boolean autoExamSetUp(Integer examId) {
+        if (examMapper.autoExamSetUp(examId)) {
+            noticeStudent("测验准备开始!");
+            return true;
+        }
         return false;
     }
 
@@ -104,6 +142,13 @@ public class ExamServiceImpl implements ExamService {
      */
     @Override
     public boolean examStart(Integer examId) {
+        Exam exam = getByExamId(examId);
+        exam.setStartTime(LocalDateTime.now());
+        exam.setExpTime(exam.getStartTime().plusMinutes(exam.getExamTime()));
+        if (examMapper.examStart(exam)) {
+            noticeStudent("测验开始");
+            return true;
+        }
         return false;
     }
 
@@ -116,6 +161,10 @@ public class ExamServiceImpl implements ExamService {
      */
     @Override
     public boolean autoExamStart(Integer examId){
+        if(examMapper.autoExamStart(examId)){
+            noticeStudent("测验开始");
+            return true;
+        }
         return false;
     }
 
@@ -128,6 +177,14 @@ public class ExamServiceImpl implements ExamService {
      */
     @Override
     public boolean examStop(Integer examId) {
+        Exam exam = getByExamId(examId);
+        exam.setExpTime(LocalDateTime.now());
+        Duration between = Duration.between(exam.getStartTime(), exam.getExpTime());
+        exam.setExamTime((int) between.toMinutes());
+        if(examMapper.examStop(exam)){
+            noticeStudent("测验结束");
+            return true;
+        }
         return false;
     }
 
@@ -140,6 +197,10 @@ public class ExamServiceImpl implements ExamService {
      */
     @Override
     public boolean autoExamStop(Integer examId){
+        if (examMapper.autoExamStop(examId)){
+            noticeStudent("测验结束");
+            return true;
+        }
         return false;
     }
 
@@ -168,7 +229,7 @@ public class ExamServiceImpl implements ExamService {
         List<Integer> examClass = classService.getExamClass(admin.getAdminId());
         for (Integer aClass : examClass) {
             // 遍历列表，获取班级的所有测验安排
-            if(examMapper.countExamPeriod(aClass, old.getSetupTime(), old.getExpTime()) > 0){
+            if(examMapper.countExamPeriod(aClass, old.getSetupTime(), old.getExpTime()) > 1){
                 return false;
             }
         }
@@ -188,5 +249,19 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public Exam getByExamId(Integer examId) {
         return examMapper.getByExamId(examId);
+    }
+
+
+    /**
+     * 通知学生端
+     * @param message 信息
+     */
+    private void noticeStudent(String message){
+        SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
+        // 通知学生
+        List<Integer> examClass = classService.getExamClass(admin.getAdminId());
+        for (Integer aClass : examClass) {
+            webSocketService.sendMessageAll(aClass.toString(), message);
+        }
     }
 }

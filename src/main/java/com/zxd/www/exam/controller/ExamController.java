@@ -17,14 +17,11 @@ public class ExamController {
     @Autowired
     private ExamService examService;
 
-    @PostMapping("/delay/{examId}/{delayTime}")
-    public JsonResponse examDelay(@PathVariable("examId") Integer examId, @PathVariable("delayTime") Integer delayTime){
-        if (examService.examDelay(examId, delayTime)) {
-            return new JsonResponse();
-        }
-        return new JsonResponse().notFound().message("课程冲突，请重新设置！");
-    }
 
+    /**
+     * 设置自动测验
+     * @param exam 测验
+     */
     @PostMapping("/autoSave")
     public JsonResponse autoExamSave(@RequestBody Exam exam){
         if (examService.autoExamSave(exam)) {
@@ -33,6 +30,10 @@ public class ExamController {
         return new JsonResponse().notFound().message("课程冲突，请重新设置！");
     }
 
+    /**
+     * 保存测验,并绑定测验班级
+     * @param exam 测验
+     */
     @PostMapping("/save")
     public JsonResponse save(@RequestBody Exam exam){
         if (examService.examSave(exam)) {
@@ -40,6 +41,55 @@ public class ExamController {
         }
         return new JsonResponse().notFound().message("保存错误！");
 
+    }
+
+    /**
+     * 手动准备开始测验
+     * @param exam 测验
+     */
+    @PutMapping("/setUp")
+    public JsonResponse setUp(@RequestBody Exam exam){
+        if (examService.examSetUp(exam)) {
+            return new JsonResponse();
+        }
+        return new JsonResponse().notFound().message("手动准备测验失败!");
+    }
+
+    /**
+     * 手动开始测验
+     * @param examId 测验id
+     */
+    @PutMapping("/start/{examId}")
+    public JsonResponse start(@PathVariable("examId") Integer examId){
+        if (examService.examStart(examId)) {
+            return new JsonResponse();
+        }
+        return new JsonResponse().notFound().message("手动开始测验失败！");
+    }
+
+    /**
+     * 手动结束测验
+     * @param examId 测验id
+     */
+    @PutMapping("/stop/{examId}")
+    public JsonResponse stop(@PathVariable("examId") Integer examId){
+        if (examService.examStop(examId)) {
+            return new JsonResponse();
+        }
+        return new JsonResponse().notFound().message("手动结束测验失败!");
+    }
+
+    /**
+     * 测验延时
+     * @param examId 测验id
+     * @param delayTime 延迟时间
+     */
+    @PutMapping("/delay/{examId}/{delayTime}")
+    public JsonResponse examDelay(@PathVariable("examId") Integer examId, @PathVariable("delayTime") Integer delayTime){
+        if (examService.examDelay(examId, delayTime)) {
+            return new JsonResponse();
+        }
+        return new JsonResponse().notFound().message("课程冲突，请重新设置！");
     }
 
 

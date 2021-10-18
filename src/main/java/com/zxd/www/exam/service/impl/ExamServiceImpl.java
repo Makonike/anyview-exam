@@ -11,6 +11,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -41,9 +42,10 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public boolean autoExamSave(Exam exam) {
 
-        if(exam.getSetupTime().isAfter(exam.getStartTime())){
+        if(LocalDateTime.now().isAfter(exam.getSetupTime()) || exam.getExamTime() < 0 || exam.getSetupTime().isAfter(exam.getStartTime())){
             return false;
         }
+
         // 获取当前管理员
         SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
         // 计算结束时长
@@ -150,6 +152,11 @@ public class ExamServiceImpl implements ExamService {
      */
     @Override
     public boolean examDelay(Integer examId,Integer delayTime) {
+
+        if(delayTime <= 0){
+            return false;
+        }
+
         // 获取当前管理员
         SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
         Exam old = getByExamId(examId);

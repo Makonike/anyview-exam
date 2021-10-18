@@ -4,6 +4,8 @@ import com.zxd.www.clazz.service.ClassService;
 import com.zxd.www.exam.entity.Exam;
 import com.zxd.www.exam.mapper.ExamMapper;
 import com.zxd.www.exam.service.ExamService;
+import com.zxd.www.global.constant.RedisConstant;
+import com.zxd.www.global.util.RedisUtil;
 import com.zxd.www.sys.entity.SysAdminEntity;
 import com.zxd.www.sys.mapper.TeacherMapper;
 import com.zxd.www.websocket.service.WebSocketService;
@@ -34,6 +36,9 @@ public class ExamServiceImpl implements ExamService {
     @Autowired
     private TeacherMapper teacherMapper;
 
+    @Autowired
+    private RedisUtil redisUtil;
+
     /**
      * 为未开始的测验设置为自动测验，判断冲突
      * 教师保存测验设置好准备时间和开始时间，测验时长后计算测验结束时间
@@ -60,8 +65,12 @@ public class ExamServiceImpl implements ExamService {
                 return false;
             }
         }
-        // TODO: 计时器，等到测验准备时间通知所有参与测验的学生,还有调用自动准备，自动开始，自动结束的service方法
-        return examMapper.autoExamSave(exam);
+        if (examMapper.autoExamSave(exam)) {
+            Duration between = Duration.between(LocalDateTime.now(), exam.getSetupTime());
+            redisUtil.set(RedisConstant.PREFIX_EXAM_SETUP + exam.getExamId().toString(), 1, between.toMillis() / 1000);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -111,6 +120,9 @@ public class ExamServiceImpl implements ExamService {
             }
         }
         if (examMapper.examSetUp(exam)) {
+            Duration between = Duration.between(LocalDateTime.now(), exam.getStartTime());
+            redisUtil.del(RedisConstant.PREFIX_EXAM_SETUP + exam.getExamId().toString());
+            redisUtil.set(RedisConstant.PREFIX_EXAM_START + exam.getExamId().toString(), 1, between.toMillis() / 1000);
             for (Integer aClass : examClass) {
                 webSocketService.sendMessageAll(aClass.toString(), "测试准备开始!");
             }
@@ -125,7 +137,10 @@ public class ExamServiceImpl implements ExamService {
      */
     @Override
     public boolean autoExamSetUp(Integer examId) {
+        Exam exam = getByExamId(examId);
         if (examMapper.autoExamSetUp(examId)) {
+            Duration between = Duration.between(LocalDateTime.now(), exam.getStartTime());
+            redisUtil.set(RedisConstant.PREFIX_EXAM_START + exam.getExamId().toString(), 1, between.toMillis() / 1000);
             noticeStudent("测验准备开始!");
             return true;
         }
@@ -146,6 +161,9 @@ public class ExamServiceImpl implements ExamService {
         exam.setStartTime(LocalDateTime.now());
         exam.setExpTime(exam.getStartTime().plusMinutes(exam.getExamTime()));
         if (examMapper.examStart(exam)) {
+            Duration between = Duration.between(LocalDateTime.now(), exam.getExpTime());
+            redisUtil.del(RedisConstant.PREFIX_EXAM_START + exam.getExamId().toString());
+            redisUtil.set(RedisConstant.PREFIX_EXAM_STOP + exam.getExamId().toString(), 1, between.toMillis() / 1000);
             noticeStudent("测验开始");
             return true;
         }
@@ -161,7 +179,10 @@ public class ExamServiceImpl implements ExamService {
      */
     @Override
     public boolean autoExamStart(Integer examId){
+        Exam exam = getByExamId(examId);
         if(examMapper.autoExamStart(examId)){
+            Duration between = Duration.between(LocalDateTime.now(), exam.getStartTime());
+            redisUtil.set(RedisConstant.PREFIX_EXAM_STOP + exam.getExamId().toString(), 1, between.toMillis() / 1000);
             noticeStudent("测验开始");
             return true;
         }
@@ -182,6 +203,7 @@ public class ExamServiceImpl implements ExamService {
         Duration between = Duration.between(exam.getStartTime(), exam.getExpTime());
         exam.setExamTime((int) between.toMinutes());
         if(examMapper.examStop(exam)){
+            redisUtil.del(RedisConstant.PREFIX_EXAM_STOP + exam.getExamId().toString());
             noticeStudent("测验结束");
             return true;
         }
@@ -198,6 +220,7 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public boolean autoExamStop(Integer examId){
         if (examMapper.autoExamStop(examId)){
+
             noticeStudent("测验结束");
             return true;
         }
@@ -217,7 +240,6 @@ public class ExamServiceImpl implements ExamService {
         if(delayTime <= 0){
             return false;
         }
-
         // 获取当前管理员
         SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
         Exam old = getByExamId(examId);
@@ -234,12 +256,18 @@ public class ExamServiceImpl implements ExamService {
             }
         }
         // 延迟测验
-        boolean b = examMapper.examDelay(old);
-        for (Integer aClass : examClass) {
-            // TODO: 更新学生端的测验表界面和做题界面中的倒计时,重置计时器(？)
-            webSocketService.sendMessageAll(aClass.toString(), "测验延迟"+delayTime + "分钟");
+        if (examMapper.examDelay(old)) {
+            for (Integer aClass : examClass) {
+                // TODO: 更新学生端的测验表界面和做题界面中的倒计时,重置计时器(？)
+                webSocketService.sendMessageAll(aClass.toString(), "测验延迟"+delayTime + "分钟");
+                Duration between = Duration.between(LocalDateTime.now(), old.getExpTime());
+                redisUtil.del(RedisConstant.PREFIX_EXAM_STOP + old.getExamId().toString());
+                redisUtil.set(RedisConstant.PREFIX_EXAM_STOP + old.getExamId().toString(), 1, between.toMillis() / 1000);
+
+            }
+            return true;
         }
-        return b;
+        return false;
     }
 
     /**

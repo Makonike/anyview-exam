@@ -36,7 +36,7 @@
 
     <!-- boolean update(UserEntity userEntity); -->
     <update id="update" parameterType="com.zxd.www.user.entity.UserEntity" >
-        update `t_user` set `user_password` = #{userPassword}
+        update `t_user` set `user_password` = #{userPassword}, `salt` = #{salt}
         where `user_id` = #{userId}
     </update>
 

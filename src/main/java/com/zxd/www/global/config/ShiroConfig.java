@@ -55,7 +55,7 @@ public class ShiroConfig {
 
         // 用户接口
         filterChainDefinitionMap.put("/user/info", "userFilter");
-        filterChainDefinitionMap.put("/user/update", "userFilter");
+        filterChainDefinitionMap.put("/user/update", "adminFilter");
         filterChainDefinitionMap.put("/user/save", "adminFilter");
         filterChainDefinitionMap.put("/user/id/**", "adminFilter");
 

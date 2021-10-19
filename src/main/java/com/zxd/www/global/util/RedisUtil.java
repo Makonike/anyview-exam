@@ -1,7 +1,9 @@
 package com.zxd.www.global.util;
 
+import com.zxd.www.global.constant.RedisConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -568,4 +570,29 @@ public class RedisUtil {
             return 0;
         }
     }
+
+    /**
+     * 获取原有value并插入新值
+     * @param key
+     * @param value
+     * @param <T>
+     * @return
+     */
+    @SuppressWarnings("all")
+    public  <T> T getAndSet(final String key, T value) {
+        T oldValue = null;
+        try {
+            ValueOperations<String, Object> operations = redisTemplate.opsForValue();
+            oldValue =(T) operations.getAndSet(key, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return oldValue;
+    }
+
+
+    public boolean setIfAbsent(final String key, String value){
+        return Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(key, value, RedisConstant.LOCK_KEY_TIME, TimeUnit.SECONDS));
+    }
+
 }

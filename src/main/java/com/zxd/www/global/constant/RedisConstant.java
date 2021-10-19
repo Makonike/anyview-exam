@@ -16,4 +16,10 @@ public class RedisConstant {
 
     public static final String PREFIX_EXAM_STOP = "EXAM_STOP_";
 
+    /**
+     * 设置锁的时间为2s
+     */
+    public static final long LOCK_KEY_TIME = 2L;
+
+
 }

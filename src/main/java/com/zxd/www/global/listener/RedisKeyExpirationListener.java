@@ -2,6 +2,7 @@ package com.zxd.www.global.listener;
 
 import com.zxd.www.exam.service.ExamService;
 import com.zxd.www.global.constant.RedisConstant;
+import com.zxd.www.global.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
@@ -20,6 +21,8 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
     @Autowired
     private ExamService examService;
 
+    @Autowired
+    private RedisUtil redisUtil;
 
     /**
      * 需要修改redis配置
@@ -36,6 +39,11 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
     public void onMessage(Message message, byte[] pattern) {
         // 生效的key
         String key=message.toString();
+        // 设置锁
+        if(redisUtil.setIfAbsent(key+".lock", "1")){
+            // 锁已经存在, 返回false
+            return ;
+        }
         // 从失效key中筛选出相应的失效的key
         // DONE: 区分各种操作的key
         if (key!=null && key.startsWith(RedisConstant.PREFIX_EXAM_SETUP)){
@@ -54,5 +62,7 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
             log.info("测验id:{}进入结束状态",examId);
             examService.autoExamStop(Integer.valueOf(examId));
         }
+        // 删除锁，避免造成数据冗余
+        redisUtil.del(key+".lock");
     }
 }

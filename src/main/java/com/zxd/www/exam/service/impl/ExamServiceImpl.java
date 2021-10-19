@@ -1,5 +1,6 @@
 package com.zxd.www.exam.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.zxd.www.clazz.service.ClassService;
 import com.zxd.www.exam.entity.Exam;
 import com.zxd.www.exam.mapper.ExamMapper;
@@ -141,7 +142,7 @@ public class ExamServiceImpl implements ExamService {
         if (examMapper.autoExamSetUp(examId)) {
             Duration between = Duration.between(LocalDateTime.now(), exam.getStartTime());
             redisUtil.set(RedisConstant.PREFIX_EXAM_START + exam.getExamId().toString(), 1, between.toMillis() / 1000);
-            noticeStudent("测验准备开始!");
+            noticeStudent(exam.getTeacherId(), "测验准备开始!");
             return true;
         }
         return false;
@@ -164,7 +165,7 @@ public class ExamServiceImpl implements ExamService {
             Duration between = Duration.between(LocalDateTime.now(), exam.getExpTime());
             redisUtil.del(RedisConstant.PREFIX_EXAM_START + exam.getExamId().toString());
             redisUtil.set(RedisConstant.PREFIX_EXAM_STOP + exam.getExamId().toString(), 1, between.toMillis() / 1000);
-            noticeStudent("测验开始");
+            noticeStudent(exam.getTeacherId(), "测验开始");
             return true;
         }
         return false;
@@ -182,8 +183,8 @@ public class ExamServiceImpl implements ExamService {
         Exam exam = getByExamId(examId);
         if(examMapper.autoExamStart(examId)){
             Duration between = Duration.between(LocalDateTime.now(), exam.getExpTime());
-            redisUtil.set(RedisConstant.PREFIX_EXAM_STOP + exam.getExamId().toString(), 1, between.toMillis() / 1000);
-            noticeStudent("测验开始");
+            redisUtil.set(RedisConstant.PREFIX_EXAM_STOP + examId.toString(), 1, between.toMillis() / 1000);
+            noticeStudent(exam.getTeacherId(), "测验开始");
             return true;
         }
         return false;
@@ -204,7 +205,7 @@ public class ExamServiceImpl implements ExamService {
         exam.setExamTime((int) between.toMinutes());
         if(examMapper.examStop(exam)){
             redisUtil.del(RedisConstant.PREFIX_EXAM_STOP + exam.getExamId().toString());
-            noticeStudent("测验结束");
+            noticeStudent(exam.getTeacherId(), "测验结束");
             return true;
         }
         return false;
@@ -219,9 +220,9 @@ public class ExamServiceImpl implements ExamService {
      */
     @Override
     public boolean autoExamStop(Integer examId){
+        Exam exam = getByExamId(examId);
         if (examMapper.autoExamStop(examId)){
-
-            noticeStudent("测验结束");
+            noticeStudent(exam.getTeacherId(), "测验结束");
             return true;
         }
         return false;
@@ -282,12 +283,12 @@ public class ExamServiceImpl implements ExamService {
 
     /**
      * 通知学生端
+     * @param teacherId 教师id
      * @param message 信息
      */
-    private void noticeStudent(String message){
-        SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
+    private void noticeStudent(Integer teacherId, String message){
         // 通知学生
-        List<Integer> examClass = classService.getExamClass(admin.getAdminId());
+        List<Integer> examClass = classService.getExamClassByTeacherId(teacherId);
         for (Integer aClass : examClass) {
             webSocketService.sendMessageAll(aClass.toString(), message);
         }

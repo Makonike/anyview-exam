@@ -3,7 +3,6 @@ package com.zxd.www.clazz.service.impl;
 import com.zxd.www.clazz.entity.ClassEntity;
 import com.zxd.www.clazz.mapper.ClassMapper;
 import com.zxd.www.clazz.service.ClassService;
-import jdk.internal.dynalink.support.ClassMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,8 +48,8 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public boolean bindClassToExam(Integer classId, Integer examId) {
-        return classMapper.bindClassToExam(classId, examId);
+    public void bindClassToExam(Integer classId, Integer examId) {
+        classMapper.bindClassToExam(classId, examId);
     }
 
     @Override
@@ -65,5 +64,10 @@ public class ClassServiceImpl implements ClassService {
     @Override
     public List<Integer> getExamClass(Integer adminId) {
         return classMapper.getExamClass(adminId);
+    }
+
+    @Override
+    public List<Integer> getExamClassByTeacherId(Integer teacherId) {
+        return classMapper.getExamClassByTeacherId(teacherId);
     }
 }

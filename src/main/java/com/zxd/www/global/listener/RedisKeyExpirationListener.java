@@ -34,10 +34,10 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
      */
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        //生效的key
+        // 生效的key
         String key=message.toString();
-        //从失效key中筛选出相应的失效的key
-        //DONE: 区分各种操作的key
+        // 从失效key中筛选出相应的失效的key
+        // DONE: 区分各种操作的key
         if (key!=null && key.startsWith(RedisConstant.PREFIX_EXAM_SETUP)){
             //截取examId，调用相关方法
             String examId = key.substring(11);

@@ -29,4 +29,6 @@ public interface ClassMapper {
 
     List<Integer> getExamClass(Integer adminId);
 
+    List<Integer> getExamClassByTeacherId(Integer teacherId);
+
 }

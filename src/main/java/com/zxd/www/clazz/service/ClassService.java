@@ -20,11 +20,13 @@ public interface ClassService {
 
     ClassEntity getByClassId(Integer classId);
 
-    boolean bindClassToExam(Integer classId, Integer examId);
+    void bindClassToExam(Integer classId, Integer examId);
 
     List<ClassEntity> getList();
 
     List<Integer> getExamClass(Integer adminId);
+
+    List<Integer> getExamClassByTeacherId(Integer teacherId);
 
 
 

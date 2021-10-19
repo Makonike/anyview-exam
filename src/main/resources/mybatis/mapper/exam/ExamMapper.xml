@@ -75,7 +75,7 @@
 
     <!-- Exam getByExamId(Integer examId); -->
     <select id="getByExamId" resultType="com.zxd.www.exam.entity.Exam">
-        select `exam_id`, `teacher_id`, `setup_time`, `start_time`, `exam_time`, `status`
+        select `exam_id`, `teacher_id`, `setup_time`, `start_time`, `exam_time`, `exp_time`, `status`
         from `t_exam`
         where `exam_id` = #{examId}
     </select>

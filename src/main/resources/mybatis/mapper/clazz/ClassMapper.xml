@@ -82,9 +82,16 @@
         and te.`status` in (0, 1, 2)
     </select>
 
-    <!-- List<Integer> getClassOtherExam(Integer adminId); -->
-    <select id="getClassOtherExam" resultType="java.lang.Integer">
-        select `class`
+    <!-- List<Integer> getExamClassByTeacherId(Integer teacherId); -->
+    <select id="getExamClassByTeacherId" resultType="java.lang.Integer">
+        select distinct `class_id`
+        from `conn_exam_class` cec
+        left join `t_exam` te
+        on cec.`exam_id` = te.`exam_id`
+        left join `t_teacher` tt
+        on te.`teacher_id` = tt.`teacher_id`
+        where tt.`teacher_id` = #{teacherId}
+        and te.`status` in (0, 1, 2)
     </select>
 
 

@@ -80,6 +80,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/exam/start/**", "adminFilter");
         filterChainDefinitionMap.put("/exam/stop/**", "adminFilter");
         filterChainDefinitionMap.put("/exam/update", "adminFilter");
+        // 测验题目表接口
+        filterChainDefinitionMap.put("/exam/table/**", "adminFilter");
 
         
         // 添加自己的过滤器并取名

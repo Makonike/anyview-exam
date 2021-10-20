@@ -6,31 +6,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 /**
- * 测验题目
+ * 题库实体类
  * @author Makonike
- * @date 2021-10-18 19:29
+ * @date 2021-10-20 17:53
  **/
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Question {
+public class QuestionBand {
 
     @TableId(type = IdType.AUTO)
-    private Integer questionId;
+    private Integer questionBandId;
 
-    private String questionName;
-
-    private String topic;
-
-    private String sections;
-
-    private Integer difficulty;
-
-    private LocalDateTime createTime;
-
-    private LocalDateTime updateTime;
+    private String questionBandName;
 
 }

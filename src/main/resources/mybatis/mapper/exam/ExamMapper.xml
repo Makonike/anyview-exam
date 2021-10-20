@@ -13,8 +13,8 @@
     <!-- boolean examSave(Exam exam); -->
     <insert id="examSave" useGeneratedKeys="true" keyProperty="examId" parameterType="com.zxd.www.exam.entity.Exam">
         insert into `t_exam`
-        (`exam_id`, `teacher_id`)
-        values(#{examId}, #{teacherId})
+        (`exam_id`, `table_id`, `teacher_id`)
+        values(#{examId}, #{questionTableId}, #{teacherId})
     </insert>
 
     <!-- boolean examSetUp(Exam exam); -->
@@ -69,6 +69,14 @@
     <update id="autoExamSetUp">
         update `t_exam`
         set `status` = 1
+        where `exam_id` = #{examId}
+        and `status` = 0
+    </update>
+
+    <!-- void update(Exam exam); -->
+    <update id="update">
+        update `t_exam`
+        set `table_id` = #{questionTableId}
         where `exam_id` = #{examId}
         and `status` = 0
     </update>

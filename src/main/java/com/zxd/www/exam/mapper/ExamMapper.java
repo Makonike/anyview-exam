@@ -79,4 +79,11 @@ public interface ExamMapper {
     Integer countExamPeriod(@Param("classId") Integer classId,@Param("setupTime") LocalDateTime setupTime
             , @Param("expTime") LocalDateTime expTime);
 
+
+    /**
+     * 修改测验编排：修改题目表
+     * @param exam 测验
+     */
+    boolean update(Exam exam);
+
 }

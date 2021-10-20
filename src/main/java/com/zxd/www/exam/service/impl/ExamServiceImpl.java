@@ -280,6 +280,15 @@ public class ExamServiceImpl implements ExamService {
         return examMapper.getByExamId(examId);
     }
 
+    /**
+     * 修改测验编排，更改题目表
+     * @param exam 测验
+     */
+    @Override
+    public boolean update(Exam exam) {
+        return examMapper.update(exam);
+    }
+
 
     /**
      * 通知学生端

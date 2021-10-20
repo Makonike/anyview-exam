@@ -30,6 +30,12 @@ public class Exam {
      * 发布教师id
      */
     private Integer teacherId;
+
+    /**
+     * 题目表id
+     */
+    private Integer questionTableId;
+
     /**
      * 开始准备时间
      */

@@ -92,5 +92,13 @@ public class ExamController {
         return new JsonResponse().notFound().message("课程冲突，请重新设置！");
     }
 
+    @PutMapping("/update")
+    public JsonResponse examUpdate(@RequestBody Exam exam){
+        if (examService.update(exam)) {
+            return new JsonResponse();
+        }
+        return new JsonResponse().notFound().message("修改测验失败");
+    }
+
 
 }

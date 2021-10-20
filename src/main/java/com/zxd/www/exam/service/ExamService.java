@@ -68,4 +68,10 @@ public interface ExamService {
      * @param examId examId
      */
     Exam getByExamId(Integer examId);
+
+    /**
+     * 修改测验编排，更改题目表
+     * @param exam 测验
+     */
+    boolean update(Exam exam);
 }

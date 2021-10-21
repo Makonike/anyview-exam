@@ -69,7 +69,7 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
             cMap.put(userId, bean);
             // 组别id+map
             WsSessionManager.add(groupId, cMap);
-            log.info("组别：groupId:" + groupId + "，客户端userId:" + userId + "，连接服务器，当前连接数为：" + countUser(groupId));
+            log.info("组别groupId:" + groupId + "，客户端userId:" + userId + "，连接服务器，当前连接数为：" + countUser(groupId));
         }
 
     }
@@ -155,7 +155,7 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
      * 计算当前服务器上的连接数
      * @param groupId groupId
      */
-    private Integer countUser(String groupId){
+    public synchronized Integer countUser(String groupId){
         int size = 0;
         Map<String,WebSocketBean> cMap = WsSessionManager.get(groupId);
         if(cMap != null){
@@ -217,7 +217,6 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
     }
 
     /**
-     * TODO: 发送者id和接收者id
      * 对某个用户发消息
      * @param groupId groupId
      * @param userId 接收者id

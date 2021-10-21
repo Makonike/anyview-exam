@@ -5,6 +5,7 @@ import com.zxd.www.exam.service.ExamService;
 import com.zxd.www.sys.util.AdminJwtUtil;
 import com.zxd.www.user.util.JwtUtil;
 import com.zxd.www.websocket.constant.WebSocketConstant;
+import com.zxd.www.websocket.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.ServerHttpRequest;
@@ -30,6 +31,9 @@ public class WebSocketInterceptor implements HandshakeInterceptor {
     @Autowired
     private ClassService classService;
 
+    @Autowired
+    private WebSocketService webSocketService;
+
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) {
         ServletServerHttpRequest req = (ServletServerHttpRequest) request;
@@ -42,8 +46,10 @@ public class WebSocketInterceptor implements HandshakeInterceptor {
 
         // 如果是用户，就取出班级号存入groupId，将userId存入userId中
         if(userId != null){
+            String groupId = classService.getClassIdByUserId(userId).toString();
             attributes.put(WebSocketConstant.USER_ID, userId.toString());
-            attributes.put(WebSocketConstant.GROUP_ID, classService.getClassIdByUserId(userId).toString());
+            attributes.put(WebSocketConstant.GROUP_ID, groupId);
+            webSocketService.notifyOnline(groupId, userId.toString());
             return true;
         }
 
@@ -52,6 +58,8 @@ public class WebSocketInterceptor implements HandshakeInterceptor {
         if(adminId != null){
             attributes.put(WebSocketConstant.USER_ID, adminId.toString());
             attributes.put(WebSocketConstant.GROUP_ID, WebSocketConstant.ADMIN_GROUP_ID);
+            // 集群服务器单点登录
+            webSocketService.notifyOnline(WebSocketConstant.ADMIN_GROUP_ID, adminId.toString());
             return true;
         }
         return false;

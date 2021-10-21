@@ -61,6 +61,8 @@ public class RedisConfig {
         container.addMessageListener(messageListenerAdapter(), new PatternTopic(WebSocketConstant.SEND_ONE_CHANNEL));
         // 监听所有
         container.addMessageListener(messageAllListenerAdapter(), new PatternTopic(WebSocketConstant.SEND_ALL_CHANNEL));
+        // 监听单点登录
+        container.addMessageListener(messageNotifyOnlineAdapter(), new PatternTopic(WebSocketConstant.NOTIFY_ONLINE_CHANNEL));
         return container;
     }
 
@@ -76,6 +78,11 @@ public class RedisConfig {
     @Bean
     public MessageListenerAdapter messageAllListenerAdapter(){
         return new MessageListenerAdapter(redisReceiver, WebSocketConstant.SEND_ALL_METHOD_NAME);
+    }
+
+    @Bean
+    public MessageListenerAdapter messageNotifyOnlineAdapter(){
+        return new MessageListenerAdapter(redisReceiver, WebSocketConstant.NOTIFY_ONLINE);
     }
 
 }

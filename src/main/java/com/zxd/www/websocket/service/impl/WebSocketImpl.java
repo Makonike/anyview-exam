@@ -39,4 +39,11 @@ public class WebSocketImpl implements WebSocketService {
         msg.setMsg(message);
         redisTemplate.convertAndSend(WebSocketConstant.SEND_ONE_CHANNEL, JSON.toJSONString(msg));
     }
+
+    @Override
+    public void notifyOnline(String groupId, String userId) {
+        String msg = groupId + "," + userId;
+        redisTemplate.convertAndSend(WebSocketConstant.NOTIFY_ONLINE_CHANNEL, msg);
+    }
+
 }

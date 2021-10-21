@@ -49,8 +49,4 @@ public class QuestionTableServiceImpl implements QuestionTableService {
         return tableMapper.selectByTeacherId(teacher.getTeacherId());
     }
 
-    @Override
-    public void bandSelectedToTable(List<Integer> selectedIds, Integer tableId) {
-        tableMapper.bandSelectedToTable(selectedIds, tableId);
-    }
 }

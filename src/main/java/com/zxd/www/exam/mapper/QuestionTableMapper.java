@@ -23,11 +23,4 @@ public interface QuestionTableMapper {
      */
     List<QuestionTableEntity> selectByTeacherId(Integer teacherId);
 
-    /**
-     * 批量插入已选题目号
-     * @param selectedIds 已选题目id列表
-     * @param tableId 题目表id
-     */
-    void bandSelectedToTable(@Param("selectedIds") List<Integer> selectedIds,@Param("tableId") Integer tableId);
-
 }

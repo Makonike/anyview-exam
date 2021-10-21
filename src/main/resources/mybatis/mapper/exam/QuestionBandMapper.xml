@@ -3,7 +3,7 @@
 <mapper namespace="com.zxd.www.exam.mapper.QuestionBandMapper">
 
     <!-- boolean insert(QuestionBand questionBand); -->
-    <insert id="insert">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="questionBandId">
         insert into `t_question_band`
         (`question_band_id`, `question_band_name`)
         values(#{questionBandId}, #{questionBandName})

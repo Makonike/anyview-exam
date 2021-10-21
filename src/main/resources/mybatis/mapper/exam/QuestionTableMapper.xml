@@ -9,16 +9,6 @@
         values(#{questionTableId}, #{tableName}, #{teacherId})
     </insert>
 
-    <!-- void bandSelectedToTable(List<Integer> selectedIds, Integer tableId); -->
-    <insert id="bandSelectedToTable">
-        insert into `conn_selected_table`
-        (`selected_id`, `table_id`)
-        values
-        <foreach collection="selectedIds" separator="," index="index" item="selectedId">
-            (#{selectedId}, #{tableId})
-        </foreach>
-    </insert>
-
     <!-- boolean delete(Integer questionTableId); -->
     <update id="delete" parameterType="Integer">
         update `t_question_table`

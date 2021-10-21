@@ -15,6 +15,4 @@ public interface QuestionTableService {
     boolean delete(Integer questionTableId);
 
     List<QuestionTableEntity> getByTeacherId();
-
-    void bandSelectedToTable(List<Integer> selectedIds, Integer tableId);
 }

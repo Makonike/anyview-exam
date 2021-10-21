@@ -1,10 +1,13 @@
 package com.zxd.www.exam.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * 已选测验题目
@@ -25,7 +28,15 @@ public class SelectedQuestion {
     private Integer questionId;
 
     /**
+     * 所属题目表id
+     */
+    private Integer tableId;
+
+    /**
      * 分数
      */
     private Integer score;
+
+    @TableField(exist = false)
+    private Question question;
 }

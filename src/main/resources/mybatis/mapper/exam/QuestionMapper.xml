@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.www.exam.mapper.QuestionMapper">
+
+
+    <!-- boolean insert(Question question); -->
+    <insert id="insert">
+        insert into `t_question`
+        (`question_id`, `band_id`, `question_name`, `topic`, `sections`, `difficulty`)
+        values (#{questionId}, #{bandId}, #{questionName}, #{topic}, #{sections}, #{difficulty})
+    </insert>
+
+    <!-- boolean update(Question question); -->
+    <update id="update">
+        update `t_question`
+        set `question_name` = #{questionName}, `topic` = #{topic}, `sections` = #{sections}
+        , `difficulty` = #{difficulty}
+        where `question_id` = #{questionId}
+    </update>
+
+    <!-- boolean delete(Integer questionId); -->
+    <delete id="delete">
+        delete from `t_question`
+        where `question_id` = #{questionId}
+    </delete>
+
+    <!-- List<Question> selectQuestionByBandId(Integer bandId); -->
+    <select id="selectQuestionByBandId" resultType="com.zxd.www.exam.entity.Question">
+        select `question_id`, `band_id`, `question_name`, `topic`, `sections`, `difficulty`
+                , `create_time`, `update_time`
+        from `t_question`
+        where `band_id` = #{bandId}
+    </select>
+
+</mapper>

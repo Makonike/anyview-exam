@@ -86,6 +86,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/exam/band/**", "adminFilter");
         // 已选题目接口
         filterChainDefinitionMap.put("/exam/select/**", "adminFilter");
+        // 题目接口
+        filterChainDefinitionMap.put("/exam/question/**", "adminFilter");
 
         
         // 添加自己的过滤器并取名

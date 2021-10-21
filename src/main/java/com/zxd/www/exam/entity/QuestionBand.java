@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * 题库实体类
  * @author Makonike
@@ -20,5 +22,9 @@ public class QuestionBand {
     private Integer questionBandId;
 
     private String questionBandName;
+
+    private LocalDateTime createTime;
+
+    private LocalDateTime updateTime;
 
 }

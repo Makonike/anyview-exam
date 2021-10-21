@@ -19,7 +19,13 @@ public class SelectedQuestion {
     @TableId(type = IdType.AUTO)
     private Integer selectedQuestionId;
 
+    /**
+     * 原题id
+     */
     private Integer questionId;
 
+    /**
+     * 分数
+     */
     private Integer score;
 }

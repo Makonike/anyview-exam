@@ -21,16 +21,39 @@ public class Question {
     @TableId(type = IdType.AUTO)
     private Integer questionId;
 
+    /**
+     * 题库id
+     */
+    private Integer bandId;
+
+    /**
+     * 问题名
+     */
     private String questionName;
 
+    /**
+     * 题目
+     */
     private String topic;
 
+    /**
+     * 章节
+     */
     private String sections;
 
+    /**
+     * 难度 0-打卡题 1-简单题 2-中等题 3-难题
+     */
     private Integer difficulty;
 
+    /**
+     * 创建时间
+     */
     private LocalDateTime createTime;
 
+    /**
+     * 更新时间
+     */
     private LocalDateTime updateTime;
 
 }

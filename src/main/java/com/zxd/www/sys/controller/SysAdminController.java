@@ -88,6 +88,10 @@ public class SysAdminController {
     @DeleteMapping("/delete/{adminId}")
     @RequiresPermissions("sys:admin:delete")
     public JsonResponse delete(@PathVariable("adminId") Integer adminId){
+        SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
+        if(admin.getAdminId().equals(adminId)){
+            return new JsonResponse().unauthorized().message("无法删除自己！");
+        }
         if(adminService.delete(adminId)){
             return new JsonResponse();
         }

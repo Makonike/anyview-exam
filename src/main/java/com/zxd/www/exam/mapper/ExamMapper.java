@@ -86,4 +86,6 @@ public interface ExamMapper {
      */
     boolean update(Exam exam);
 
+    Exam getByUserId(Integer userId);
+
 }

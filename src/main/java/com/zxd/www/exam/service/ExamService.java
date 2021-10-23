@@ -74,4 +74,10 @@ public interface ExamService {
      * @param exam 测验
      */
     boolean update(Exam exam);
+
+    /**
+     * 用户获取当前测验信息
+     * @param userId 用户id
+     */
+    Exam getByUserId(Integer userId);
 }

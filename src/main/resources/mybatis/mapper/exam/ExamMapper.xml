@@ -102,5 +102,18 @@
         or #{expTime} BETWEEN te.`setup_time` and te.`exp_time`)
     </select>
 
+    <!-- Exam getByUserId(Integer userId); -->
+    <select id="getByUserId" resultType="com.zxd.www.exam.entity.Exam">
+        select te.`exam_id`, `table_id` questionTableId, `teacher_id`, `setup_time`, `start_time`
+        , `exp_time`, `exam_time`, `status`
+        from `t_exam` te
+        left join `conn_exam_class` cec
+        on cec.`exam_id` = te.`exam_id`
+        left join `t_student` ts
+        on cec.`class_id` = ts.`class_id`
+        where ts.`user_id` = #{userId}
+        and te.`status` in (1, 2)
+    </select>
+
 
 </mapper>

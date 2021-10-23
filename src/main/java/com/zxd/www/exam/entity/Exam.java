@@ -61,4 +61,8 @@ public class Exam {
     @TableField(exist = false)
     private List<Integer> classIds;
 
+    @TableField(exist = false)
+    private LocalDateTime serverTime;
+
+
 }

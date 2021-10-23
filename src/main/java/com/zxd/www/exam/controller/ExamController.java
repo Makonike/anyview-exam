@@ -3,8 +3,12 @@ package com.zxd.www.exam.controller;
 import com.zxd.www.exam.entity.Exam;
 import com.zxd.www.exam.service.ExamService;
 import com.zxd.www.global.entity.dto.JsonResponse;
+import com.zxd.www.user.entity.UserEntity;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 /**
  * @author Makonike
@@ -100,5 +104,15 @@ public class ExamController {
         return new JsonResponse().notFound().message("修改测验失败");
     }
 
+    @GetMapping("/serverTime")
+    public JsonResponse getServerTime(){
+        return new JsonResponse().data(LocalDateTime.now());
+    }
+
+    @GetMapping("/user/get")
+    public JsonResponse getByExamData(){
+        UserEntity user = (UserEntity) SecurityUtils.getSubject().getPrincipal();
+        return new JsonResponse().data(examService.getByUserId(user.getUserId()));
+    }
 
 }

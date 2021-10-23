@@ -10,6 +10,7 @@ import com.zxd.www.global.util.RedisUtil;
 import com.zxd.www.sys.entity.SysAdminEntity;
 import com.zxd.www.sys.mapper.TeacherMapper;
 import com.zxd.www.websocket.service.WebSocketService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.List;
  * @date 2021-10-15 23:26
  **/
 @Service
+@Slf4j
 public class ExamServiceImpl implements ExamService {
 
     @Autowired
@@ -125,7 +127,7 @@ public class ExamServiceImpl implements ExamService {
             redisUtil.del(RedisConstant.PREFIX_EXAM_SETUP + exam.getExamId().toString());
             redisUtil.set(RedisConstant.PREFIX_EXAM_START + exam.getExamId().toString(), 1, between.toMillis() / 1000);
             for (Integer aClass : examClass) {
-                webSocketService.sendMessageAll(aClass.toString(), "测试准备开始!");
+                webSocketService.sendMessageAll(aClass.toString(), "测验准备开始!");
             }
             return true;
         }
@@ -203,12 +205,9 @@ public class ExamServiceImpl implements ExamService {
         exam.setExpTime(LocalDateTime.now());
         Duration between = Duration.between(exam.getStartTime(), exam.getExpTime());
         exam.setExamTime((int) between.toMinutes());
-        if(examMapper.examStop(exam)){
-            redisUtil.del(RedisConstant.PREFIX_EXAM_STOP + exam.getExamId().toString());
-            noticeStudent(exam.getTeacherId(), "测验结束");
-            return true;
-        }
-        return false;
+        redisUtil.del(RedisConstant.PREFIX_EXAM_STOP + exam.getExamId().toString());
+        noticeStudent(exam.getTeacherId(), "测验结束");
+        return examMapper.examStop(exam);
     }
 
     /**
@@ -221,11 +220,8 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public boolean autoExamStop(Integer examId){
         Exam exam = getByExamId(examId);
-        if (examMapper.autoExamStop(examId)){
-            noticeStudent(exam.getTeacherId(), "测验结束");
-            return true;
-        }
-        return false;
+        noticeStudent(exam.getTeacherId(), "测验结束");
+        return examMapper.autoExamStop(examId);
     }
 
     /**
@@ -289,9 +285,20 @@ public class ExamServiceImpl implements ExamService {
         return examMapper.update(exam);
     }
 
+    @Override
+    public Exam getByUserId(Integer userId) {
+        Exam exam = examMapper.getByUserId(userId);
+        if(exam == null){
+            return null;
+        }
+        exam.setServerTime(LocalDateTime.now());
+        return exam;
+    }
+
 
     /**
      * 通知学生端
+     * TODO: 测验开始时直接发送测验信息，而不是发送message后还需要前端去请求数据
      * @param teacherId 教师id
      * @param message 信息
      */

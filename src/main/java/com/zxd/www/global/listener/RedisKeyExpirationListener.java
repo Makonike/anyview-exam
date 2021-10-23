@@ -39,25 +39,31 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
     public void onMessage(Message message, byte[] pattern) {
         // 生效的key
         String key=message.toString();
-        // 设置锁
-        if(redisUtil.setIfAbsent(key+".lock", "1")){
-            // 锁已经存在, 返回false
+        if(key == null){
             return ;
+        }
+        // 设置锁
+        if(key.startsWith(RedisConstant.PREFIX_EXAM_SETUP) || key.startsWith(RedisConstant.PREFIX_EXAM_START)
+        || key.startsWith(RedisConstant.PREFIX_EXAM_STOP)){
+            if(!redisUtil.setIfAbsent(".lock" + key, "1")){
+                // 锁已经存在, 返回false
+                return ;
+            }
         }
         // 从失效key中筛选出相应的失效的key
         // DONE: 区分各种操作的key
-        if (key!=null && key.startsWith(RedisConstant.PREFIX_EXAM_SETUP)){
+        if (key.startsWith(RedisConstant.PREFIX_EXAM_SETUP)){
             //截取examId，调用相关方法
             String examId = key.substring(11);
             log.info("测验id:{}进入准备状态",examId);
             examService.autoExamSetUp(Integer.valueOf(examId));
         }
-        if (key!=null && key.startsWith(RedisConstant.PREFIX_EXAM_START)){
+        if (key.startsWith(RedisConstant.PREFIX_EXAM_START)){
             String examId = key.substring(11);
             log.info("测验id:{}进入开始状态",examId);
             examService.autoExamStart(Integer.valueOf(examId));
         }
-        if (key!=null && key.startsWith(RedisConstant.PREFIX_EXAM_STOP)){
+        if (key.startsWith(RedisConstant.PREFIX_EXAM_STOP)){
             String examId = key.substring(10);
             log.info("测验id:{}进入结束状态",examId);
             examService.autoExamStop(Integer.valueOf(examId));

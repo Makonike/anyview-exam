@@ -47,10 +47,10 @@ public class SysAdminController {
             return new JsonResponse(ResultCode.UNAUTHORIZED, "用户不存在", null);
         }
 
-        // 校验用户名或密码是否正确
+        // 校验密码是否正确
         String loginPassword = new Sha256Hash(adminPassword, adminEntity.getSalt()).toHex();
         if(!adminEntity.getAdminPassword().equals(loginPassword)){
-            return new JsonResponse(ResultCode.UNAUTHORIZED, "用户名或密码错误", null);
+            return new JsonResponse(ResultCode.UNAUTHORIZED, "密码错误", null);
         }
 
         log.info("管理员:" + admin.getAdminName() + "登录成功！");

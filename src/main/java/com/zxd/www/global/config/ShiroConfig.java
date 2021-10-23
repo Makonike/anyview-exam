@@ -90,10 +90,12 @@ public class ShiroConfig {
         // 题库接口
         filterChainDefinitionMap.put("/exam/band/**", "adminFilter");
         // 已选题目接口
-        filterChainDefinitionMap.put("/exam/select/**", "adminFilter");
+        filterChainDefinitionMap.put("/exam/select/add", "adminFilter");
+        filterChainDefinitionMap.put("/exam/select/delete/**", "adminFilter");
+        filterChainDefinitionMap.put("/exam/select/list/**", "adminFilter");
+        filterChainDefinitionMap.put("/exam/select/get/**", "userFilter");
         // 题目接口
         filterChainDefinitionMap.put("/exam/question/**", "adminFilter");
-
         
         // 添加自己的过滤器并取名
         Map<String, Filter> filterMap = new HashMap<>(2);

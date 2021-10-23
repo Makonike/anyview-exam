@@ -39,4 +39,9 @@ public class SelectedQuestionController {
     public JsonResponse getList(@PathVariable("tableId") Integer tableId){
         return new JsonResponse().data(questionService.getByTableId(tableId));
     }
+
+    @GetMapping("/get/{tableId}")
+    public JsonResponse get(@PathVariable("tableId") Integer tableId){
+        return new JsonResponse().data(questionService.getByTableId(tableId));
+    }
 }

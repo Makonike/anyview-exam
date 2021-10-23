@@ -52,6 +52,8 @@ public class ShiroConfig {
 
         // 排除ws连接接口
         filterChainDefinitionMap.put("/exam/ws", "anon");
+        // 排除获取服务端时间的接口
+        filterChainDefinitionMap.put("/exam/serverTime", "anon");
 
         // 用户接口
         filterChainDefinitionMap.put("/user/info", "userFilter");
@@ -80,6 +82,9 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/exam/start/**", "adminFilter");
         filterChainDefinitionMap.put("/exam/stop/**", "adminFilter");
         filterChainDefinitionMap.put("/exam/update", "adminFilter");
+        filterChainDefinitionMap.put("/exam/user/get", "userFilter");
+        filterChainDefinitionMap.put("/exam/user/examPlan", "userFilter");
+
         // 测验题目表接口
         filterChainDefinitionMap.put("/exam/table/**", "adminFilter");
         // 题库接口

@@ -26,6 +26,8 @@ public class Exam {
     @TableId(type = IdType.AUTO)
     private Integer examId;
 
+    private String examName;
+
     /**
      * 发布教师id
      */

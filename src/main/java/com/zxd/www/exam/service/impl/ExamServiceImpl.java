@@ -51,7 +51,9 @@ public class ExamServiceImpl implements ExamService {
      */
     @Override
     public boolean autoExamSave(Exam exam) {
-
+        if (!examSave(exam)) {
+            return false;
+        }
         if(LocalDateTime.now().isAfter(exam.getSetupTime()) || exam.getExamTime() < 0 || exam.getSetupTime().isAfter(exam.getStartTime())){
             return false;
         }
@@ -203,6 +205,12 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public boolean examStop(Integer examId) {
         Exam exam = getByExamId(examId);
+        // 还在准备中的测验
+        if(LocalDateTime.now().isBefore(exam.getStartTime())){
+            redisUtil.del(RedisConstant.PREFIX_EXAM_START + exam.getExamId().toString());
+            exam.setExamTime(0);
+            exam.setExpTime(LocalDateTime.now());
+        }
         exam.setExpTime(LocalDateTime.now());
         Duration between = Duration.between(exam.getStartTime(), exam.getExpTime());
         exam.setExamTime((int) between.toMinutes());

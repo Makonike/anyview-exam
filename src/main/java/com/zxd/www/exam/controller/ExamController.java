@@ -120,4 +120,9 @@ public class ExamController {
         return new JsonResponse().data(examService.getExamList());
     }
 
+    @GetMapping("/get/{examId}")
+    public JsonResponse getById(@PathVariable("examId") Integer examId){
+        return new JsonResponse().data(examService.getByExamId(examId));
+    }
+
 }

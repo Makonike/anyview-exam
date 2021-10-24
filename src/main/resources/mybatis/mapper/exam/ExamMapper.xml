@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zxd.www.exam.mapper.ExamMapper">
+    <resultMap id="examMap" type="com.zxd.www.exam.entity.Exam">
+        <id column="exam_id" property="examId" jdbcType="INTEGER"/>
+        <result column="exam_name" property="examName" jdbcType="VARCHAR"/>
+        <result column="teacher_id" property="teacherId" jdbcType="INTEGER"/>
+        <result column="table_id" property="questionTableId" jdbcType="INTEGER"/>
+        <result column="setup_time" property="setupTime" jdbcType="DATETIMEOFFSET"/>
+        <result column="start_time" property="startTime" jdbcType="DATETIMEOFFSET"/>
+        <result column="exam_time" property="examTime" jdbcType="INTEGER"/>
+        <result column="exp_time" property="expTime" jdbcType="DATETIMEOFFSET"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <collection property="classIds" ofType="INTEGER" javaType="java.util.List">
+            <constructor>
+                <arg column="class_id"/>
+            </constructor>
+        </collection>
+    </resultMap>
 
     <!-- boolean autoExamSave(Exam exam); -->
     <update id="autoExamSave" parameterType="com.zxd.www.exam.entity.Exam">
@@ -82,10 +98,13 @@
     </update>
 
     <!-- Exam getByExamId(Integer examId); -->
-    <select id="getByExamId" resultType="com.zxd.www.exam.entity.Exam">
-        select `exam_id`, `exam_name`, `teacher_id`, `setup_time`, `start_time`, `exam_time`, `exp_time`, `status`
-        from `t_exam`
-        where `exam_id` = #{examId}
+    <select id="getByExamId" resultMap="examMap">
+        select te.`exam_id`, `table_id`, `exam_name`, `teacher_id`, `setup_time`, `start_time`, `exam_time`, `exp_time`, `status`,
+               cec.`class_id`
+        from `t_exam` te
+        left join `conn_exam_class` cec
+        on te.`exam_id` = cec.`exam_id`
+        where te.`exam_id` = #{examId}
     </select>
 
     <!-- Integer countExamPeriod(Integer classId, LocalDateTime setupTime, LocalDateTime expTime); -->

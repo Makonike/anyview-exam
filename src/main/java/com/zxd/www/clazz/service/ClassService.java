@@ -28,6 +28,6 @@ public interface ClassService {
 
     List<Integer> getExamClassByTeacherId(Integer teacherId);
 
-
+    List<ClassEntity> getListByTeacher();
 
 }

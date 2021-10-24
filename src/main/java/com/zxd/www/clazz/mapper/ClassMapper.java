@@ -31,4 +31,5 @@ public interface ClassMapper {
 
     List<Integer> getExamClassByTeacherId(Integer teacherId);
 
+    List<ClassEntity> getListByTeacherId(Integer teacherId);
 }

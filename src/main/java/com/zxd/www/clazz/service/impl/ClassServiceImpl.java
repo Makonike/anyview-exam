@@ -3,6 +3,11 @@ package com.zxd.www.clazz.service.impl;
 import com.zxd.www.clazz.entity.ClassEntity;
 import com.zxd.www.clazz.mapper.ClassMapper;
 import com.zxd.www.clazz.service.ClassService;
+import com.zxd.www.sys.entity.SysAdminEntity;
+import com.zxd.www.sys.entity.Teacher;
+import com.zxd.www.sys.mapper.TeacherMapper;
+import com.zxd.www.sys.service.TeacherService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +22,9 @@ public class ClassServiceImpl implements ClassService {
 
     @Autowired
     private ClassMapper classMapper;
+
+    @Autowired
+    private TeacherMapper teacherMapper;
 
     @Override
     public boolean save(ClassEntity classEntity) {
@@ -69,5 +77,12 @@ public class ClassServiceImpl implements ClassService {
     @Override
     public List<Integer> getExamClassByTeacherId(Integer teacherId) {
         return classMapper.getExamClassByTeacherId(teacherId);
+    }
+
+    @Override
+    public List<ClassEntity> getListByTeacher() {
+        SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
+        Teacher teacher = teacherMapper.selectByAdminId(admin.getAdminId());
+        return classMapper.getListByTeacherId(teacher.getTeacherId());
     }
 }

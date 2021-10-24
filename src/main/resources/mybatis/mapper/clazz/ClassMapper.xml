@@ -94,5 +94,17 @@
         and te.`status` in (0, 1, 2)
     </select>
 
+    <!-- List<ClassEntity> getListByTeacherId(Integer teacherId); -->
+    <select id="getListByTeacherId" resultType="com.zxd.www.clazz.entity.ClassEntity">
+        select tc.`class_id`, tc.`class_name`
+        from `t_class` tc
+        left join `conn_course_class` ccc
+        on tc.`class_id` = ccc.`class_id`
+        left join `conn_course_teacher` ctc
+        on ccc.`course_id` = ctc.`course_id`
+        where tc.`removed` = 0
+        and ctc.`teacher_id` = #{teacherId}
+    </select>
+
 
 </mapper>

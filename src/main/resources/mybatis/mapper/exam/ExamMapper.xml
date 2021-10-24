@@ -38,7 +38,7 @@
         update `t_exam`
         set `status` = 3, `exam_time` = #{examTime} , `exp_time` = #{expTime}
         where `exam_id` = #{examId}
-        and `status` = 2
+        and `status` in (1, 2)
     </update>
 
     <!-- boolean examDelay(Exam exam); -->

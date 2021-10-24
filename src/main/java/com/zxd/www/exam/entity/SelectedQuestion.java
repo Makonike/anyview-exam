@@ -33,6 +33,11 @@ public class SelectedQuestion {
     private Integer tableId;
 
     /**
+     * 序号
+     */
+    private Integer order;
+
+    /**
      * 分数
      */
     private Integer score;

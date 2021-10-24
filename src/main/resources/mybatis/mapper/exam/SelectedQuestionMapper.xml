@@ -20,10 +20,10 @@
     <!-- boolean insert(List<SelectedQuestion> selectedQuestions); -->
     <insert id="insert" useGeneratedKeys="true" keyProperty="selectedQuestionId">
         insert into `t_selected_question`
-        (`selected_question_id`, `question_id`, `table_id`, `score`)
+        (`selected_question_id`, `question_id`, `order`, `table_id`, `score`)
         values
         <foreach collection="selectedQuestions" separator="," index="index" item="selectedQuestion">
-            (#{selectedQuestion.selectedQuestionId}, #{selectedQuestion.questionId}, #{selectedQuestion.tableId}, #{selectedQuestion.score})
+            (#{selectedQuestion.selectedQuestionId}, #{selectedQuestion.questionId}, #{selectedQuestion.order}, #{selectedQuestion.tableId}, #{selectedQuestion.score})
         </foreach>
     </insert>
 
@@ -41,7 +41,7 @@
         left join `t_selected_question` tsq
         on tq.`question_id` = tsq.`question_id`
         where tsq.`table_id` = #{tableId}
-        order by tsq.`selected_question_id` asc
+        order by tsq.`order` asc
     </select>
 
 </mapper>

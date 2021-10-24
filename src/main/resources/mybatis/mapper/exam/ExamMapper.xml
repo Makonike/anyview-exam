@@ -13,8 +13,8 @@
     <!-- boolean examSave(Exam exam); -->
     <insert id="examSave" useGeneratedKeys="true" keyProperty="examId" parameterType="com.zxd.www.exam.entity.Exam">
         insert into `t_exam`
-        (`exam_id`, `table_id`, `teacher_id`)
-        values(#{examId}, #{questionTableId}, #{teacherId})
+        (`exam_id`,`exam_name`, `table_id`, `teacher_id`)
+        values(#{examId}, #{examName}, #{questionTableId}, #{teacherId})
     </insert>
 
     <!-- boolean examSetUp(Exam exam); -->
@@ -76,14 +76,14 @@
     <!-- void update(Exam exam); -->
     <update id="update">
         update `t_exam`
-        set `table_id` = #{questionTableId}
+        set `table_id` = #{questionTableId}, `exam_name` = #{examName}
         where `exam_id` = #{examId}
         and `status` = 0
     </update>
 
     <!-- Exam getByExamId(Integer examId); -->
     <select id="getByExamId" resultType="com.zxd.www.exam.entity.Exam">
-        select `exam_id`, `teacher_id`, `setup_time`, `start_time`, `exam_time`, `exp_time`, `status`
+        select `exam_id`, `exam_name`, `teacher_id`, `setup_time`, `start_time`, `exam_time`, `exp_time`, `status`
         from `t_exam`
         where `exam_id` = #{examId}
     </select>
@@ -104,7 +104,7 @@
 
     <!-- Exam getByUserId(Integer userId); -->
     <select id="getByUserId" resultType="com.zxd.www.exam.entity.Exam">
-        select te.`exam_id`, `table_id` questionTableId, `teacher_id`, `setup_time`, `start_time`
+        select te.`exam_id`, `exam_name`, `table_id` questionTableId, `teacher_id`, `setup_time`, `start_time`
         , `exp_time`, `exam_time`, `status`
         from `t_exam` te
         left join `conn_exam_class` cec
@@ -113,6 +113,14 @@
         on cec.`class_id` = ts.`class_id`
         where ts.`user_id` = #{userId}
         and te.`status` in (1, 2)
+    </select>
+
+    <!-- List<Exam> selectExamList(Integer teacherId); -->
+    <select id="selectExamList" resultType="com.zxd.www.exam.entity.Exam">
+        select `exam_id`, `exam_name`, `table_id` questionTableId, `teacher_id`, `setup_time`, `start_time`
+             , `exp_time`, `exam_time`, `status`
+        from `t_exam`
+        where `teacher_id` = #{teacherId}
     </select>
 
 

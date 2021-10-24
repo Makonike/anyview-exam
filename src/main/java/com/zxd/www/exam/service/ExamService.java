@@ -2,6 +2,8 @@ package com.zxd.www.exam.service;
 
 import com.zxd.www.exam.entity.Exam;
 
+import java.util.List;
+
 /**
  * @author Makonike
  * @date 2021-10-15 23:06
@@ -80,4 +82,10 @@ public interface ExamService {
      * @param userId 用户id
      */
     Exam getByUserId(Integer userId);
+
+    /**
+     * 教师获取测验列表
+     */
+    List<Exam> getExamList();
+
 }

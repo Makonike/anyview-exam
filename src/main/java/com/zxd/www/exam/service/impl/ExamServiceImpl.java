@@ -8,6 +8,7 @@ import com.zxd.www.exam.service.ExamService;
 import com.zxd.www.global.constant.RedisConstant;
 import com.zxd.www.global.util.RedisUtil;
 import com.zxd.www.sys.entity.SysAdminEntity;
+import com.zxd.www.sys.entity.Teacher;
 import com.zxd.www.sys.mapper.TeacherMapper;
 import com.zxd.www.websocket.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
@@ -277,7 +278,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     /**
-     * 修改测验编排，更改题目表
+     * 修改测验编排，更改题目表和测验名称
      * @param exam 测验
      */
     @Override
@@ -293,6 +294,16 @@ public class ExamServiceImpl implements ExamService {
         }
         exam.setServerTime(LocalDateTime.now());
         return exam;
+    }
+
+    @Override
+    public List<Exam> getExamList() {
+        SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
+        Teacher teacher = teacherMapper.selectByAdminId(admin.getAdminId());
+        if(teacher == null){
+            return null;
+        }
+        return examMapper.selectExamList(teacher.getTeacherId());
     }
 
 

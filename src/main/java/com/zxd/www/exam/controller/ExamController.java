@@ -115,4 +115,9 @@ public class ExamController {
         return new JsonResponse().data(examService.getByUserId(user.getUserId()));
     }
 
+    @GetMapping("/list")
+    public JsonResponse getExamList(){
+        return new JsonResponse().data(examService.getExamList());
+    }
+
 }

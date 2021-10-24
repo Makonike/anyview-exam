@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Makonike
@@ -81,11 +82,17 @@ public interface ExamMapper {
 
 
     /**
-     * 修改测验编排：修改题目表
+     * 修改测验编排：修改题目表和测验名称
      * @param exam 测验
      */
     boolean update(Exam exam);
 
     Exam getByUserId(Integer userId);
+
+    /**
+     * 教师获取测验列表
+     * @param teacherId 教师id
+     */
+    List<Exam> selectExamList(Integer teacherId);
 
 }

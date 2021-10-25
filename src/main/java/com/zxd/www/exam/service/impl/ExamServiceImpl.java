@@ -66,12 +66,15 @@ public class ExamServiceImpl implements ExamService {
         SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
         // 计算结束时长
         exam.setExpTime(exam.getStartTime().plusMinutes(exam.getExamTime()));
-
+        int flag = 0;
+        if(exam.getStartTime() != null){
+            flag = 1;
+        }
         // 排除冲突
         List<Integer> examClass = classService.getExamClass(admin.getAdminId());
         for (Integer aClass : examClass) {
             // 遍历列表，获取班级的所有测验安排
-            if(examMapper.countExamPeriod(aClass, exam.getSetupTime(), exam.getExpTime()) > 0){
+            if(examMapper.countExamPeriod(aClass, exam.getSetupTime(), exam.getExpTime()) > flag){
                 return false;
             }
         }
@@ -225,6 +228,7 @@ public class ExamServiceImpl implements ExamService {
         exam.setExamTime((int) between.toMinutes());
         redisUtil.del(RedisConstant.PREFIX_EXAM_STOP + exam.getExamId().toString());
         noticeStudent(exam.getTeacherId(), "测验结束");
+        scheduledTask.stopTask(examId);
         return examMapper.examStop(exam);
     }
 

@@ -64,7 +64,7 @@ public class RedisConfig {
         // 监听单点登录
         container.addMessageListener(messageNotifyOnlineAdapter(), new PatternTopic(WebSocketConstant.NOTIFY_ONLINE_CHANNEL));
         // 监听关闭定时器
-        container.addMessageListener(messageAllListenerAdapter(), new PatternTopic(WebSocketConstant.STOP_SCHEDULED_CHANNEL));
+        container.addMessageListener(messageStopScheduledTask(), new PatternTopic(WebSocketConstant.STOP_SCHEDULED_CHANNEL));
         return container;
     }
 

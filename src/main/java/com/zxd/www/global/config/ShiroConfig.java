@@ -86,6 +86,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/exam/user/get", "userFilter");
         filterChainDefinitionMap.put("/exam/user/examPlan", "userFilter");
         filterChainDefinitionMap.put("/exam/get/**", "adminFilter");
+        filterChainDefinitionMap.put("/exam/scheduled/**", "adminFilter");
 
         // 测验题目表接口
         filterChainDefinitionMap.put("/exam/table/**", "adminFilter");

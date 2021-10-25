@@ -29,4 +29,9 @@ public interface WebSocketService {
      */
     void notifyOnline(String groupId, String userId);
 
+    /**
+     * 关闭定时器
+     * @param message 测验id
+     */
+    void sendStopSchedulerMessage(String message);
 }

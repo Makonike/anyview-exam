@@ -1,6 +1,7 @@
 package com.zxd.www.websocket.handler.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.zxd.www.scheduler.service.ScheduledTask;
 import com.zxd.www.websocket.bean.SendMessage;
 import com.zxd.www.websocket.bean.SendMessageAll;
 import com.zxd.www.websocket.bean.WebSocketBean;
@@ -28,6 +29,9 @@ public class RedisReceiver {
 
     @Autowired
     HttpAuthHandler handler;
+
+    @Autowired
+    private ScheduledTask scheduledTask;
 
     /**
      * 点对点发送消息
@@ -66,6 +70,10 @@ public class RedisReceiver {
             remove.getSession().close();
             log.info("组别groupId:" + groupId + "，客户端userId：" + userId + "，断开连接，当前连接数：" + handler.countUser(groupId));
         }
+    }
+
+    public void stopScheduled(String message){
+        scheduledTask.endTask(Integer.valueOf(message));
     }
 
 

@@ -3,6 +3,7 @@ package com.zxd.www.exam.controller;
 import com.zxd.www.exam.entity.Exam;
 import com.zxd.www.exam.service.ExamService;
 import com.zxd.www.global.entity.dto.JsonResponse;
+import com.zxd.www.scheduler.service.ScheduledTask;
 import com.zxd.www.user.entity.UserEntity;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class ExamController {
     @Autowired
     private ExamService examService;
 
+    @Autowired
+    private ScheduledTask scheduledTask;
 
     /**
      * 设置自动测验
@@ -123,6 +126,16 @@ public class ExamController {
     @GetMapping("/get/{examId}")
     public JsonResponse getById(@PathVariable("examId") Integer examId){
         return new JsonResponse().data(examService.getByExamId(examId));
+    }
+
+    /**
+     * 停止定时器
+     * @param examId examId
+     */
+    @PostMapping("/scheduled/{examId}")
+    public JsonResponse stopExamScheduled(@PathVariable("examId") Integer examId){
+        scheduledTask.stopTask(examId);
+        return new JsonResponse();
     }
 
 }

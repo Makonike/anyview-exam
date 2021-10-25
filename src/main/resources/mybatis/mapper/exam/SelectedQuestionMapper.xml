@@ -5,6 +5,7 @@
     <resultMap id="questionMap" type="com.zxd.www.exam.entity.SelectedQuestion">
         <id column="selected_question_id" property="selectedQuestionId" jdbcType="INTEGER"/>
         <result column="score" property="score" jdbcType="INTEGER"/>
+        <result column="order" property="order" jdbcType="INTEGER"/>
         <collection property="question" javaType="com.zxd.www.exam.entity.Question">
             <id column="question_id" property="questionId" jdbcType="INTEGER"/>
             <result column="band_id" property="bandId" jdbcType="INTEGER"/>
@@ -35,7 +36,7 @@
 
     <!-- List<SelectedQuestion> selectByTableId(Integer tableId); -->
     <select id="selectByTableId" resultMap="questionMap">
-        select tsq.`selected_question_id`, tq.`question_id`, tq.`band_id`, tq.`question_name`, tq.`topic`, tq.`sections`, tq.`difficulty`
+        select tsq.`selected_question_id`, tsq.`order`, tq.`question_id`, tq.`band_id`, tq.`question_name`, tq.`topic`, tq.`sections`, tq.`difficulty`
                 , tq.`create_time`, tq.`update_time`, tsq.`score`
         from `t_question` tq
         left join `t_selected_question` tsq

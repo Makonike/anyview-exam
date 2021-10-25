@@ -40,6 +40,7 @@ public class ScheduledTask {
      */
     public void startTask(Integer examId){
         // 第一个参数是定时任务执行的方法，第二个为定时任务触发器，设置定时任务执行的时间
+        log.info("===定时任务" + examId + "开始执行===");
         future.put(examId.toString(),threadPoolTaskScheduler.schedule(new Runnable() {
             @Override
             public void run() {

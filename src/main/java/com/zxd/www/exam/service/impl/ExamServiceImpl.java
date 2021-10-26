@@ -123,6 +123,13 @@ public class ExamServiceImpl implements ExamService {
             return false;
         }
 
+        // 防止设置自动测验后，又手动准备导致定时任务重复执行
+        Exam old = getByExamId(exam.getExamId());
+        if(old != null){
+            if(old.getStartTime() != null){
+                scheduledTask.stopTask(exam.getExamId());
+            }
+        }
         exam.setSetupTime(LocalDateTime.now());
         exam.setExpTime(exam.getStartTime().plusMinutes(exam.getExamTime()));
         SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();

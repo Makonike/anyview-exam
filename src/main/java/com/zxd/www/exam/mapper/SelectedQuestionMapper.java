@@ -18,4 +18,5 @@ public interface SelectedQuestionMapper {
 
     List<SelectedQuestion> selectByTableId(Integer tableId);
 
+    boolean deleteAll(Integer tableId);
 }

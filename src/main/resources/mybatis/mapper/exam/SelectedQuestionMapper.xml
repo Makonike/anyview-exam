@@ -34,6 +34,12 @@
         where `selected_question_id` = #{selectedQuestionId}
     </delete>
 
+    <!-- boolean deleteAll(Integer tableId); -->
+    <delete id="deleteAll">
+        delete from `t_selected_question`
+        where `table_id` = #{tableId}
+    </delete>
+
     <!-- List<SelectedQuestion> selectByTableId(Integer tableId); -->
     <select id="selectByTableId" resultMap="questionMap">
         select tsq.`selected_question_id`, tsq.`order`, tq.`question_id`, tq.`band_id`, tq.`question_name`, tq.`topic`, tq.`sections`, tq.`difficulty`

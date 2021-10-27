@@ -24,6 +24,7 @@ public class SelectedQuestionServiceImpl implements SelectedQuestionService {
      */
     @Override
     public boolean add(List<SelectedQuestion> selectedQuestions) {
+        questionMapper.deleteAll(selectedQuestions.get(0).getTableId());
         return questionMapper.insert(selectedQuestions);
     }
 

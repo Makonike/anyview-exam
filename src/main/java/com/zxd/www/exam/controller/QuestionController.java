@@ -34,7 +34,7 @@ public class QuestionController {
     }
 
     @GetMapping("/list/{bandId}")
-    public JsonResponse list(@PathVariable Integer bandId){
+    public JsonResponse list(@PathVariable("bandId") Integer bandId){
         return new JsonResponse().data(questionService.getByBandId(bandId));
     }
 

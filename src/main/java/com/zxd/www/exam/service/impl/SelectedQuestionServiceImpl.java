@@ -5,6 +5,7 @@ import com.zxd.www.exam.mapper.SelectedQuestionMapper;
 import com.zxd.www.exam.service.SelectedQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class SelectedQuestionServiceImpl implements SelectedQuestionService {
      * @param selectedQuestions 已选题目列表
      */
     @Override
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public boolean add(List<SelectedQuestion> selectedQuestions) {
         questionMapper.deleteAll(selectedQuestions.get(0).getTableId());
         return questionMapper.insert(selectedQuestions);

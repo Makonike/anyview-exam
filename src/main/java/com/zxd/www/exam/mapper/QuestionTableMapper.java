@@ -23,4 +23,15 @@ public interface QuestionTableMapper {
      */
     List<QuestionTableEntity> selectByTeacherId(Integer teacherId);
 
+    /**
+     * 修改测验题目表名
+     * @param questionTableEntity 测验题目表
+     */
+    boolean update(QuestionTableEntity questionTableEntity);
+
+    /**
+     * 根据题目表名搜索
+     * @param tableName 题目表名
+     */
+    QuestionTableEntity selectByName(String tableName);
 }

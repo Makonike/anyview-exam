@@ -26,7 +26,7 @@ public class QuestionTableController {
         if (questionTableService.add(questionTableEntity)) {
             return new JsonResponse();
         }
-        return new JsonResponse().badRequest().message("添加测验题目表失败!");
+        return new JsonResponse().badRequest().message("题目表" + questionTableEntity.getTableName() + "已存在");
     }
 
     /**
@@ -50,6 +50,12 @@ public class QuestionTableController {
         return new JsonResponse().data(questionTableService.getByTeacherId());
     }
 
-
+    @PutMapping("/update")
+    public JsonResponse update(@RequestBody QuestionTableEntity questionTableEntity){
+        if (questionTableService.update(questionTableEntity)) {
+            return new JsonResponse();
+        }
+        return new JsonResponse().notFound().message("题目表" + questionTableEntity.getTableName() + "已存在");
+    }
 
 }

@@ -17,11 +17,27 @@
         and `removed` = 0
     </update>
 
+    <!-- boolean update(QuestionTableEntity questionTableEntity); -->
+    <update id="update">
+        update `t_question_table`
+        set `table_name` = #{tableName}
+        where `question_table_id` = #{questionTableId}
+        and `removed` = 0
+    </update>
+
     <!-- List<QuestionTableEntity> selectByTeacherId(Integer teacherId); -->
     <select id="selectByTeacherId" resultType="com.zxd.www.exam.entity.QuestionTableEntity">
         select `question_table_id`, `table_name`, `teacher_id`, `create_time`
         from `t_question_table`
         where `teacher_id` = #{teacherId}
+        and `removed` = 0
+    </select>
+
+    <!-- QuestionTableEntity selectByName(String tableName); -->
+    <select id="selectByName" resultType="com.zxd.www.exam.entity.QuestionTableEntity">
+        select `question_table_id`, `table_name`, `teacher_id`, `create_time`
+        from `t_question_table`
+        where `table_name` = #{tableName}
         and `removed` = 0
     </select>
 

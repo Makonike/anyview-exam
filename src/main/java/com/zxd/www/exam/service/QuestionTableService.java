@@ -15,4 +15,8 @@ public interface QuestionTableService {
     boolean delete(Integer questionTableId);
 
     List<QuestionTableEntity> getByTeacherId();
+
+    boolean update(QuestionTableEntity questionTableEntity);
+
+    QuestionTableEntity getByName(String tableName);
 }

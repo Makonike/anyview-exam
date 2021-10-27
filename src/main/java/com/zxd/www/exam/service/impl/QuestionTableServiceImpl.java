@@ -3,6 +3,7 @@ package com.zxd.www.exam.service.impl;
 import com.zxd.www.exam.entity.QuestionTableEntity;
 import com.zxd.www.exam.mapper.QuestionTableMapper;
 import com.zxd.www.exam.service.QuestionTableService;
+import com.zxd.www.exam.service.SelectedQuestionService;
 import com.zxd.www.sys.entity.SysAdminEntity;
 import com.zxd.www.sys.entity.Teacher;
 import com.zxd.www.sys.service.SysAdminService;
@@ -25,8 +26,16 @@ public class QuestionTableServiceImpl implements QuestionTableService {
     @Autowired
     private SysAdminService adminService;
 
+    @Autowired
+    private SelectedQuestionService selectedQuestionService;
+
     @Override
     public boolean add(QuestionTableEntity questionTableEntity) {
+
+        QuestionTableEntity byName = getByName(questionTableEntity.getTableName());
+        if(byName != null){
+            return false;
+        }
         SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
         // 获取teacherId
         Teacher teacher = adminService.teacherInfo(admin.getAdminId());
@@ -47,6 +56,20 @@ public class QuestionTableServiceImpl implements QuestionTableService {
         Teacher teacher = adminService.teacherInfo(admin.getAdminId());
 
         return tableMapper.selectByTeacherId(teacher.getTeacherId());
+    }
+
+    @Override
+    public boolean update(QuestionTableEntity questionTableEntity) {
+        QuestionTableEntity byName = getByName(questionTableEntity.getTableName());
+        if(byName != null){
+            return false;
+        }
+        return tableMapper.update(questionTableEntity);
+    }
+
+    @Override
+    public QuestionTableEntity getByName(String tableName) {
+        return tableMapper.selectByName(tableName);
     }
 
 }

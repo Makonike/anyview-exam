@@ -56,14 +56,14 @@ public class StudentController {
         return new JsonResponse().data(studentService.getStudentList());
     }
 
-    @PostMapping("/save")
+    @PostMapping("/save/{userId}")
     @RequiresPermissions("sys:student:save")
-    public JsonResponse save(@RequestBody Student student, @RequestParam("userId") Integer userId){
+    public JsonResponse save(@RequestBody Student student, @PathVariable("userId") Integer userId){
         boolean bind = studentService.save(student, userId);
         if(bind){
             return new JsonResponse();
         }
-        return new JsonResponse().unauthorized().message("保存失败,未找到该用户");
+        return new JsonResponse().unauthorized().message("保存失败,未找到该用户或该用户已绑定信息!");
     }
 
     @DeleteMapping("/delete/{studentId}")

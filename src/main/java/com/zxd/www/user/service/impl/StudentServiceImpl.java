@@ -46,6 +46,10 @@ public class StudentServiceImpl implements StudentService {
         if(user == null){
             return false;
         }
+        Student hasStudent = userService.getInfoById(userId);
+        if(hasStudent != null){
+            return false;
+        }
         student.setUserId(userId);
         student.setStudentNo(user.getUserName());
         return studentMapper.insertStudent(student);

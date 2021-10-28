@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.www.course.mapper.CourseMapper">
+
+    <!-- boolean insert(CourseEntity courseEntity); -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="courseId">
+        insert into `t_course`
+        (`course_id`, `course_name`)
+        values (#{courseId}, #{courseName})
+    </insert>
+
+    <!-- boolean delete(Integer courseId); -->
+    <update id="delete">
+        update `t_course`
+        set `removed` = 1
+        where `course_id` = #{courseId}
+        and `removed` = 0
+    </update>
+
+    <!-- boolean connCourseToTeacher(Integer courseId, Integer teacherId); -->
+    <insert id="connCourseToTeacher">
+        insert into `conn_course_teacher`
+        (`course_id`, `teacher_id`)
+        values(#{courseId}, #{teacherId})
+    </insert>
+
+    <!-- boolean connCourseToClass(Integer courseId, Integer classId); -->
+    <insert id="connCourseToClass">
+        insert into `conn_course_class`
+        (`course_id`, `class_id`)
+        values(#{courseId}, #{classId})
+    </insert>
+
+    <!-- CourseEntity selectById(Integer courseId); -->
+    <select id="selectById" resultType="com.zxd.www.course.entity.CourseEntity">
+        select `course_id`, `course_name`
+        from `t_course`
+        where `course_id` = #{courseId}
+        and `removed` = 0
+    </select>
+
+    <!-- List<CourseEntity> selectList(); -->
+    <select id="selectList" resultType="com.zxd.www.course.entity.CourseEntity">
+        select `course_id`, `course_name`
+        from `t_course`
+        where `removed` = 0
+    </select>
+
+    <!-- List<CourseEntity> getByTeacherId(Integer teacherId); -->
+    <select id="getByTeacherId" resultType="com.zxd.www.course.entity.CourseEntity">
+        select tc.`course_id`, tc.`course_name`
+        from `t_course` tc
+        left join `conn_course_teacher` cct
+        on tc.`course_id` = cct.`course_id`
+        where cct.`teacher_id` = #{teacherId}
+        and tc.`removed` = 0
+    </select>
+
+    <!-- List<CourseEntity> getByClassId(Integer classId); -->
+    <select id="getByClassId" resultType="com.zxd.www.course.entity.CourseEntity">
+        select tc.`course_id`, tc.`course_name`
+        from `t_course` tc
+        left join `conn_course_class` ccc
+        on tc.`course_id` = ccc.`course_id`
+        where ccc.`class_id` = #{classId}
+        and tc.`removed` = 0
+    </select>
+
+
+</mapper>

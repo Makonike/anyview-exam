@@ -72,6 +72,16 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/student/save/**", "adminFilter");
         filterChainDefinitionMap.put("/student/delete/**", "adminFilter");
 
+        // 课程接口
+        filterChainDefinitionMap.put("/course/save", "adminFilter");
+        filterChainDefinitionMap.put("/course/delete/**", "adminFilter");
+        filterChainDefinitionMap.put("/course/get/id/**", "adminFilter");
+        filterChainDefinitionMap.put("/course/get/list", "adminFilter");
+        filterChainDefinitionMap.put("/conn/teacher/**", "adminFilter");
+        filterChainDefinitionMap.put("/conn/class/**", "adminFilter");
+        filterChainDefinitionMap.put("/get/teacher/**", "adminFilter");
+        filterChainDefinitionMap.put("/get/class/**", "adminFilter");
+
         // 管理员接口
         filterChainDefinitionMap.put("/sys/info", "adminFilter");
         filterChainDefinitionMap.put("/class/get", "adminFilter");

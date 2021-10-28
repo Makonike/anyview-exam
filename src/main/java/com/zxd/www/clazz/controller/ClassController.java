@@ -23,5 +23,9 @@ public class ClassController {
         return new JsonResponse().data(classService.getListByTeacher());
     }
 
+    @GetMapping("/get")
+    public JsonResponse getList(){
+        return new JsonResponse().data(classService.getList());
+    }
 
 }

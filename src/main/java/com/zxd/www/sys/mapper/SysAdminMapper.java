@@ -25,6 +25,8 @@ public interface SysAdminMapper{
 
     SysAdminEntity selectByAdminName(String adminName);
 
-    boolean bindTeacherToAdmin(@Param(value = "adminId") Integer adminId
+    boolean bindRoleToAdmin(@Param(value = "adminId") Integer adminId
             ,@Param(value = "roleId") Integer roleId);
+
+    Integer findRoleAdminByAdminId(Integer adminId);
 }

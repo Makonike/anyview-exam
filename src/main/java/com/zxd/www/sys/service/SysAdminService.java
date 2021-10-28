@@ -23,4 +23,7 @@ public interface SysAdminService {
 
     Teacher teacherInfo(Integer adminId);
 
+    boolean bindAdminToAdmin(Integer adminId);
+
+    boolean isAdminRoleAdmin(Integer adminId);
 }

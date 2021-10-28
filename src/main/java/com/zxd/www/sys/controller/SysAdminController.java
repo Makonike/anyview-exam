@@ -138,4 +138,13 @@ public class SysAdminController {
         return new JsonResponse().notFound().message("更新失败，未找到该管理员");
     }
 
+    @PostMapping("/bind/{adminId}")
+    @RequiresPermissions("sys:admin:allocate")
+    public JsonResponse bindAdminRole(@PathVariable("adminId") Integer adminId){
+        if (adminService.bindAdminToAdmin(adminId)) {
+            return new JsonResponse();
+        }
+        return new JsonResponse().unauthorized().message("绑定失败！该用户已是管理员身份!");
+    }
+
 }

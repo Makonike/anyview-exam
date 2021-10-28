@@ -33,7 +33,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public boolean save(Teacher teacher, Integer adminId) {
         teacher.setAdminId(adminId);
-        adminMapper.bindTeacherToAdmin(adminId, 2);
+        adminMapper.bindRoleToAdmin(adminId, 2);
         return teacherMapper.save(teacher);
     }
 

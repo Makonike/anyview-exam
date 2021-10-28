@@ -37,6 +37,14 @@
         where `admin_name` = #{adminName}
     </select>
 
+    <!-- Integer findRoleAdminByAdminId(Integer adminId); -->
+    <select id="findRoleAdminByAdminId" resultType="java.lang.Integer">
+        select `admin_role_id`
+        from `conn_admin_role`
+        where `admin_id` = #{adminId}
+        and `role_id` = 1
+    </select>
+
     <!-- boolean update(SysAdminEntity admin); -->
     <update id="update">
         update `t_admin`
@@ -44,8 +52,8 @@
         where `admin_id` = #{adminId}
     </update>
 
-    <!-- boolean bindTeacherToAdmin(Integer adminId, Integer roleId); -->
-    <insert id="bindTeacherToAdmin">
+    <!-- boolean bindRoleToAdmin(Integer adminId, Integer roleId); -->
+    <insert id="bindRoleToAdmin">
         insert into `conn_admin_role`
         (`admin_id`, `role_id`)
         values(#{adminId}, #{roleId})

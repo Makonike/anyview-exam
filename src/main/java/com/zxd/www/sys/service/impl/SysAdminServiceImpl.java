@@ -83,4 +83,21 @@ public class SysAdminServiceImpl implements SysAdminService {
     public Teacher teacherInfo(Integer adminId) {
         return teacherMapper.selectByAdminId(adminId);
     }
+
+    @Override
+    public boolean bindAdminToAdmin(Integer adminId) {
+        if(isAdminRoleAdmin(adminId)){
+            return false;
+        }
+        return adminMapper.bindRoleToAdmin(adminId,1);
+    }
+
+    /**
+     * 判断是否拥有管理员角色
+     * @param adminId 管理员id
+     */
+    @Override
+    public boolean isAdminRoleAdmin(Integer adminId) {
+        return adminMapper.findRoleAdminByAdminId(adminId) != null;
+    }
 }

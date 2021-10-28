@@ -20,4 +20,6 @@ public interface TeacherService {
 
     List<Teacher> getList();
 
+    Teacher getByAdminId(Integer adminId);
+
 }

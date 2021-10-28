@@ -56,4 +56,9 @@ public class TeacherServiceImpl implements TeacherService {
     public List<Teacher> getList() {
         return teacherMapper.selectList();
     }
+
+    @Override
+    public Teacher getByAdminId(Integer adminId) {
+        return teacherMapper.selectByAdminId(adminId);
+    }
 }

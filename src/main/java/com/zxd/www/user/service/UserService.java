@@ -19,7 +19,7 @@ public interface UserService {
 
     boolean update(UserEntity userEntity);
 
-    boolean deleteBatch(Integer[] adminIds);
+    boolean deleteById(Integer userId);
 
     Student getInfoById(Integer userId);
 

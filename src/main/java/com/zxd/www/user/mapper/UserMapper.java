@@ -24,4 +24,6 @@ public interface UserMapper {
     Student userInfo(Integer userId);
 
     List<UserEntity> selectList();
+
+    boolean deleteByUserId(Integer userId);
 }

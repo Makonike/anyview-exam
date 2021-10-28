@@ -61,6 +61,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/user/save", "adminFilter");
         filterChainDefinitionMap.put("/user/id/**", "adminFilter");
         filterChainDefinitionMap.put("/user/list", "adminFilter");
+        filterChainDefinitionMap.put("/user/delete/**", "adminFilter");
 
         // 学生接口
         filterChainDefinitionMap.put("/student/no", "userFilter");

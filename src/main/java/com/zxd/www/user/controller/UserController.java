@@ -96,6 +96,7 @@ public class UserController {
     }
 
     @PostMapping("/save")
+    @RequiresPermissions("sys:user:save")
     public JsonResponse save(@RequestBody UserEntity userEntity){
         if(userService.save(userEntity)){
             return new JsonResponse();
@@ -104,6 +105,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
+    @RequiresPermissions("sys:user:update")
     public JsonResponse update(@RequestBody UserEntity userEntity){
         if(userService.update(userEntity)){
             return new JsonResponse();
@@ -123,6 +125,19 @@ public class UserController {
     @RequiresPermissions("sys:user:list")
     public JsonResponse list(){
         return new JsonResponse().data(userService.getList());
+    }
+
+    /**
+     * 删除用户
+     * @param userId 用户id
+     */
+    @DeleteMapping("/delete/{userId}")
+    @RequiresPermissions("sys:user:delete")
+    public JsonResponse delete(@PathVariable("userId") Integer userId){
+        if (userService.deleteById(userId)) {
+            return new JsonResponse();
+        }
+        return new JsonResponse().notFound().message("删除失败，未找到该用户！");
     }
 
 

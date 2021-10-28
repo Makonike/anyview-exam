@@ -52,12 +52,11 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * TODO: 批量删除用户
-     * @param adminIds adminIds
+     * @param userId userId
      */
     @Override
-    public boolean deleteBatch(Integer[] adminIds){
-        return false;
+    public boolean deleteById(Integer userId){
+        return userMapper.deleteByUserId(userId);
     }
 
     @Override

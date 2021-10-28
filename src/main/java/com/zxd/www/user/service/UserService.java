@@ -3,6 +3,8 @@ package com.zxd.www.user.service;
 import com.zxd.www.user.entity.Student;
 import com.zxd.www.user.entity.UserEntity;
 
+import java.util.List;
+
 /**
  * @author Makonike
  * @date 2021-10-12 14:38
@@ -20,4 +22,6 @@ public interface UserService {
     boolean deleteBatch(Integer[] adminIds);
 
     Student getInfoById(Integer userId);
+
+    List<UserEntity> getList();
 }

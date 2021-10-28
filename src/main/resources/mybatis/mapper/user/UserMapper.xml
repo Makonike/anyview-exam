@@ -33,6 +33,12 @@
         where `user_name` = #{userName}
     </select>
 
+    <!-- List<UserEntity> selectList(); -->
+    <select id="selectList" resultType="com.zxd.www.user.entity.UserEntity">
+        select `user_id`, `user_name`
+        from `t_user`
+    </select>
+
 
     <!-- boolean update(UserEntity userEntity); -->
     <update id="update" parameterType="com.zxd.www.user.entity.UserEntity" >

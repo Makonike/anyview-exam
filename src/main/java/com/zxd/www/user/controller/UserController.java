@@ -12,6 +12,7 @@ import com.zxd.www.user.entity.UserEntity;
 import com.zxd.www.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -113,6 +114,15 @@ public class UserController {
     @GetMapping("/id/{userId}")
     public JsonResponse getByUserId(@PathVariable("userId") Integer userId){
         return new JsonResponse().data(userService.getInfoById(userId));
+    }
+
+    /**
+     * 获取所有用户列表
+     */
+    @GetMapping("/list")
+    @RequiresPermissions("sys:user:list")
+    public JsonResponse list(){
+        return new JsonResponse().data(userService.getList());
     }
 
 

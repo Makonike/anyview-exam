@@ -22,4 +22,6 @@ public interface UserMapper {
     boolean update(UserEntity userEntity);
 
     Student userInfo(Integer userId);
+
+    List<UserEntity> selectList();
 }

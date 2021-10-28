@@ -9,6 +9,8 @@ import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author Makonike
  * @date 2021-10-12 14:38
@@ -61,6 +63,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Student getInfoById(Integer userId){
         return userMapper.userInfo(userId);
+    }
+
+    @Override
+    public List<UserEntity> getList() {
+        return userMapper.selectList();
     }
 
 

@@ -70,6 +70,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/student/bind", "userFilter");
         filterChainDefinitionMap.put("/student/list", "adminFilter");
         filterChainDefinitionMap.put("/student/save", "adminFilter");
+        filterChainDefinitionMap.put("/student/delete", "adminFilter");
 
         // 管理员接口
         filterChainDefinitionMap.put("/sys/info", "adminFilter");

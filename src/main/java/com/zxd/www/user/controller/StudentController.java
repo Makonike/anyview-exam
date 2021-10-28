@@ -3,6 +3,7 @@ package com.zxd.www.user.controller;
 import com.zxd.www.global.entity.dto.JsonResponse;
 import com.zxd.www.user.entity.Student;
 import com.zxd.www.user.service.StudentService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,12 +57,22 @@ public class StudentController {
     }
 
     @PostMapping("/save")
+    @RequiresPermissions("sys:student:save")
     public JsonResponse save(@RequestBody Student student, @RequestParam("userId") Integer userId){
         boolean bind = studentService.save(student, userId);
         if(bind){
             return new JsonResponse();
         }
         return new JsonResponse().unauthorized().message("保存失败,未找到该用户");
+    }
+
+    @DeleteMapping("/delete/{studentId}")
+    @RequiresPermissions("sys:student:delete")
+    public JsonResponse delete(@PathVariable("studentId") Integer studentId){
+        if (studentService.deleteById(studentId)) {
+            return new JsonResponse();
+        }
+        return new JsonResponse().notFound().message("删除失败，未找到该学生！");
     }
 
 }

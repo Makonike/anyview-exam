@@ -40,7 +40,7 @@
     <!-- boolean update(SysAdminEntity admin); -->
     <update id="update">
         update `t_admin`
-        set `adminName` = #{adminName}, `admin_Password` = #{adminPassword}, `salt` = #{salt}
+        set `admin_Password` = #{adminPassword}, `salt` = #{salt}
         where `admin_id` = #{adminId}
     </update>
 

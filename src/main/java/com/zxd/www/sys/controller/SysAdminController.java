@@ -2,6 +2,7 @@ package com.zxd.www.sys.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zxd.www.global.constant.CommonConstant;
 import com.zxd.www.global.constant.JwtConstant;
 import com.zxd.www.global.constant.RedisConstant;
 import com.zxd.www.global.entity.dto.JsonResponse;
@@ -88,6 +89,9 @@ public class SysAdminController {
     @DeleteMapping("/delete/{adminId}")
     @RequiresPermissions("sys:admin:delete")
     public JsonResponse delete(@PathVariable("adminId") Integer adminId){
+        if(adminId.equals(CommonConstant.SUPER_ADMIN_ID)){
+            return new JsonResponse().unauthorized().message("无法操作超级管理员!");
+        }
         SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
         if(admin.getAdminId().equals(adminId)){
             return new JsonResponse().unauthorized().message("无法删除自己！");
@@ -120,6 +124,18 @@ public class SysAdminController {
     public JsonResponse info(){
         SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
         return new JsonResponse().data(adminService.teacherInfo(admin.getAdminId()));
+    }
+
+    @PutMapping("/update")
+    @RequiresPermissions("sys:admin:update")
+    public JsonResponse update(@RequestBody SysAdminEntity admin){
+        if(admin.getAdminId().equals(CommonConstant.SUPER_ADMIN_ID)){
+            return new JsonResponse().unauthorized().message("无法操作超级管理员！");
+        }
+        if (adminService.update(admin)) {
+            return new JsonResponse();
+        }
+        return new JsonResponse().notFound().message("更新失败，未找到该管理员");
     }
 
 }

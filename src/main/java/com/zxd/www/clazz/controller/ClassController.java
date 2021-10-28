@@ -4,6 +4,7 @@ import com.zxd.www.clazz.service.ClassService;
 import com.zxd.www.global.entity.dto.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +27,11 @@ public class ClassController {
     @GetMapping("/get")
     public JsonResponse getList(){
         return new JsonResponse().data(classService.getList());
+    }
+
+    @GetMapping("/admin/get/{classId}")
+    public JsonResponse getById(@PathVariable("classId") Integer classId){
+        return new JsonResponse().data(classService.getByClassId(classId));
     }
 
 }

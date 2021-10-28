@@ -75,6 +75,7 @@ public class ShiroConfig {
         // 管理员接口
         filterChainDefinitionMap.put("/sys/info", "adminFilter");
         filterChainDefinitionMap.put("/class/get", "adminFilter");
+        filterChainDefinitionMap.put("/class/admin/get/**", "adminFilter");
         filterChainDefinitionMap.put("/sys/update", "adminFilter");
         filterChainDefinitionMap.put("/sys/bind/**", "adminFilter");
 

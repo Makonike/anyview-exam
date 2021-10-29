@@ -17,6 +17,8 @@ public interface CourseMapper {
 
     boolean delete(Integer courseId);
 
+    boolean update(CourseEntity courseEntity);
+
     CourseEntity selectById(Integer courseId);
 
     List<CourseEntity> selectList();

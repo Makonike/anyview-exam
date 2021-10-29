@@ -26,4 +26,6 @@ public interface CourseService {
 
     List<CourseEntity> getByClassId(Integer classId);
 
+    boolean update(CourseEntity courseEntity);
+
 }

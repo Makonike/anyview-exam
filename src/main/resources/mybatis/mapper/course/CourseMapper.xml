@@ -17,6 +17,14 @@
         and `removed` = 0
     </update>
 
+    <!-- boolean update(CourseEntity courseEntity); -->
+    <update id="update">
+        update `t_course`
+        set `course_name` = #{courseName}
+        where `course_id` = #{courseId}
+        and `removed` = 0
+    </update>
+
     <!-- boolean connCourseToTeacher(Integer courseId, Integer teacherId); -->
     <insert id="connCourseToTeacher">
         insert into `conn_course_teacher`

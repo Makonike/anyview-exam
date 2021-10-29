@@ -87,4 +87,9 @@ public class CourseServiceImpl implements CourseService {
     public List<CourseEntity> getByClassId(Integer classId) {
         return courseMapper.getByClassId(classId);
     }
+
+    @Override
+    public boolean update(CourseEntity courseEntity) {
+        return courseMapper.update(courseEntity);
+    }
 }

@@ -33,6 +33,14 @@ public class CourseController {
         return new JsonResponse().notFound().message("删除失败，找不到该课程！");
     }
 
+    @PutMapping("/update")
+    public JsonResponse update(@RequestBody CourseEntity courseEntity){
+        if (courseService.update(courseEntity)) {
+            return new JsonResponse();
+        }
+        return new JsonResponse().notFound().message("找不到该课程!");
+    }
+
     @GetMapping("/get/id/{courseId}")
     public JsonResponse getById(@PathVariable("courseId") Integer courseId){
         return new JsonResponse().data(courseService.getById(courseId));

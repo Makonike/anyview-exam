@@ -1,6 +1,5 @@
 package com.zxd.www.exam.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.zxd.www.clazz.service.ClassService;
 import com.zxd.www.exam.entity.Exam;
 import com.zxd.www.exam.mapper.ExamMapper;
@@ -70,15 +69,11 @@ public class ExamServiceImpl implements ExamService {
         SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
         // 计算结束时长
         exam.setExpTime(exam.getStartTime().plusMinutes(exam.getExamTime()));
-        int flag = 0;
-        if(exam.getStartTime() != null){
-            flag = 1;
-        }
         // 排除冲突
         List<Integer> examClass = classService.getExamClass(admin.getAdminId());
         for (Integer aClass : examClass) {
             // 遍历列表，获取班级的所有测验安排
-            if(examMapper.countExamPeriod(aClass, exam.getSetupTime(), exam.getExpTime()) > flag){
+            if(examMapper.countExamPeriod(aClass, exam.getSetupTime(), exam.getExpTime()) > 0){
                 return false;
             }
         }
@@ -137,12 +132,18 @@ public class ExamServiceImpl implements ExamService {
         }
         exam.setSetupTime(LocalDateTime.now());
         exam.setExpTime(exam.getStartTime().plusMinutes(exam.getExamTime()));
+        Exam byExamId = getByExamId(exam.getExamId());
+        int flag = 0;
+        // 判断是否为已设置过自动测验
+        if(byExamId.getStartTime() != null){
+            flag = 1;
+        }
         SysAdminEntity admin = (SysAdminEntity) SecurityUtils.getSubject().getPrincipal();
         // 排除冲突
         List<Integer> examClass = classService.getExamClass(admin.getAdminId());
         for (Integer aClass : examClass) {
             // 遍历列表，获取班级的所有测验安排
-            if(examMapper.countExamPeriod(aClass, exam.getSetupTime(), exam.getExpTime()) > 0){
+            if(examMapper.countExamPeriod(aClass, exam.getSetupTime(), exam.getExpTime()) > flag){
                 return false;
             }
         }
@@ -153,7 +154,9 @@ public class ExamServiceImpl implements ExamService {
             redisUtil.set(RedisConstant.PREFIX_EXAM_START + exam.getExamId().toString(), 1, between.toMillis() / 1000);
             // 开启定时任务
             scheduledTask.startTask(exam.getExamId());
-            scheduledTaskService.startScheduledSendMessage(exam.getExamId());
+            if(flag == 0){
+                scheduledTaskService.startScheduledSendMessage(exam.getExamId());
+            }
             for (Integer aClass : examClass) {
                 webSocketService.sendMessageAll(aClass.toString(), "测验准备开始!");
             }

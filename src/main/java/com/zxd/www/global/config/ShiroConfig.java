@@ -72,11 +72,23 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/student/save/**", "adminFilter");
         filterChainDefinitionMap.put("/student/delete/**", "adminFilter");
 
+        // 班级接口
+        filterChainDefinitionMap.put("/class/get", "adminFilter");
+        filterChainDefinitionMap.put("/class/admin/get/**", "adminFilter");
+        filterChainDefinitionMap.put("/class/list", "adminFilter");
+
+
         // 学校接口
         filterChainDefinitionMap.put("/school/save", "adminFilter");
         filterChainDefinitionMap.put("/school/delete/**", "adminFilter");
         filterChainDefinitionMap.put("/school/get/**", "adminFilter");
         filterChainDefinitionMap.put("/school/update", "adminFilter");
+
+        // 学院接口
+        filterChainDefinitionMap.put("/institute/save", "adminFilter");
+        filterChainDefinitionMap.put("/institute/delete/**", "adminFilter");
+        filterChainDefinitionMap.put("/institute/update", "adminFilter");
+        filterChainDefinitionMap.put("/institute/get/**", "adminFilter");
 
         // 课程接口
         filterChainDefinitionMap.put("/course/save", "adminFilter");
@@ -90,15 +102,14 @@ public class ShiroConfig {
 
         // 管理员接口
         filterChainDefinitionMap.put("/sys/info", "adminFilter");
-        filterChainDefinitionMap.put("/class/get", "adminFilter");
-        filterChainDefinitionMap.put("/class/admin/get/**", "adminFilter");
         filterChainDefinitionMap.put("/sys/update", "adminFilter");
         filterChainDefinitionMap.put("/sys/bind/**", "adminFilter");
 
         // 教师接口
         filterChainDefinitionMap.put("/sys/teacher/update", "adminFilter");
         filterChainDefinitionMap.put("/sys/teacher/save/**", "adminFilter");
-        filterChainDefinitionMap.put("/class/list", "adminFilter");
+
+
         // 测验接口
         filterChainDefinitionMap.put("/exam/delay/**", "adminFilter");
         filterChainDefinitionMap.put("/exam/autoSave", "adminFilter");

@@ -19,3 +19,7 @@ mybatis-plus:
 server:
   servlet:
     context-path: /api
+    session:
+      # 禁用tomcat的session持久化,防止启动时报错
+      persistent: false
+  port: 8080

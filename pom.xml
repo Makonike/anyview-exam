@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.zxd.www</groupId>
     <artifactId>anyview-exam</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>anyview-exam</name>
     <description>anyview-exam</description>
     <properties>
@@ -32,12 +32,6 @@
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
             <version>1.4.0</version>
-        </dependency>
-        <!-- hutool工具包 -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>5.7.14</version>
         </dependency>
         <!-- mysql驱动包 -->
         <dependency>

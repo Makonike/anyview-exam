@@ -45,7 +45,7 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
         // 设置锁
         if(key.startsWith(RedisConstant.PREFIX_EXAM_SETUP) || key.startsWith(RedisConstant.PREFIX_EXAM_START)
         || key.startsWith(RedisConstant.PREFIX_EXAM_STOP)){
-            if(!redisUtil.setIfAbsent(".lock" + key, "1")){
+            if(!redisUtil.setIfAbsent(".lock" + key, "1", RedisConstant.LOCK_KEY_TIME)){
                 // 锁已经存在, 返回false
                 return ;
             }

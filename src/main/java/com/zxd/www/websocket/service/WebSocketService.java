@@ -34,4 +34,10 @@ public interface WebSocketService {
      * @param message 测验id
      */
     void sendStopSchedulerMessage(String message);
+
+    /**
+     * 开启定时器
+     * @param message 测验id
+     */
+    void sendStartSchedulerMessage(String message);
 }

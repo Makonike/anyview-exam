@@ -51,4 +51,9 @@ public class ExamScheduledTaskServiceImpl implements ExamScheduledTaskService {
     public void examStopSendMessage(Integer examId) {
         webSocketService.sendStopSchedulerMessage(examId.toString());
     }
+
+    @Override
+    public void startScheduledSendMessage(Integer examId) {
+        webSocketService.sendStartSchedulerMessage(examId.toString());
+    }
 }

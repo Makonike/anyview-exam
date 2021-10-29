@@ -9,4 +9,6 @@ public interface ExamScheduledTaskService {
     void examStartSendMessage(Integer examId);
 
     void examStopSendMessage(Integer examId);
+
+    void startScheduledSendMessage(Integer examId);
 }

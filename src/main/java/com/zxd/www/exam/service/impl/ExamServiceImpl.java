@@ -7,6 +7,7 @@ import com.zxd.www.exam.mapper.ExamMapper;
 import com.zxd.www.exam.service.ExamService;
 import com.zxd.www.global.constant.RedisConstant;
 import com.zxd.www.global.util.RedisUtil;
+import com.zxd.www.scheduler.service.ExamScheduledTaskService;
 import com.zxd.www.scheduler.service.ScheduledTask;
 import com.zxd.www.sys.entity.SysAdminEntity;
 import com.zxd.www.sys.entity.Teacher;
@@ -47,6 +48,9 @@ public class ExamServiceImpl implements ExamService {
     @Autowired
     private ScheduledTask scheduledTask;
 
+    @Autowired
+    private ExamScheduledTaskService scheduledTaskService;
+
     /**
      * 为未开始的测验设置为自动测验，判断冲突
      * 教师保存测验设置好准备时间和开始时间，测验时长后计算测验结束时间
@@ -83,6 +87,7 @@ public class ExamServiceImpl implements ExamService {
             redisUtil.set(RedisConstant.PREFIX_EXAM_SETUP + exam.getExamId().toString(), 1, between.toMillis() / 1000);
             // 开启定时任务
             scheduledTask.startTask(exam.getExamId());
+            scheduledTaskService.startScheduledSendMessage(exam.getExamId());
             return true;
         }
         return false;
@@ -148,6 +153,7 @@ public class ExamServiceImpl implements ExamService {
             redisUtil.set(RedisConstant.PREFIX_EXAM_START + exam.getExamId().toString(), 1, between.toMillis() / 1000);
             // 开启定时任务
             scheduledTask.startTask(exam.getExamId());
+            scheduledTaskService.startScheduledSendMessage(exam.getExamId());
             for (Integer aClass : examClass) {
                 webSocketService.sendMessageAll(aClass.toString(), "测验准备开始!");
             }

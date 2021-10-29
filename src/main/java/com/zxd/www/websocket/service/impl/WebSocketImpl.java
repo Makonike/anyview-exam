@@ -51,4 +51,9 @@ public class WebSocketImpl implements WebSocketService {
         redisTemplate.convertAndSend(WebSocketConstant.STOP_SCHEDULED_CHANNEL, message);
     }
 
+    @Override
+    public void sendStartSchedulerMessage(String message) {
+        redisTemplate.convertAndSend(WebSocketConstant.START_SCHEDULED_CHANNEL, message);
+    }
+
 }

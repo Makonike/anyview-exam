@@ -14,6 +14,8 @@ public class WebSocketConstant {
 
     public static final String STOP_SCHEDULED_CHANNEL = "channel:stopScheduled";
 
+    public static final String START_SCHEDULED_CHANNEL = "channel:startScheduled";
+
     public static final String MESSAGE_TYPE_SEND_ONE = "sendOne";
 
     public static final String MESSAGE_TYPE_SEND_ALL = "sendAll";
@@ -31,6 +33,8 @@ public class WebSocketConstant {
     public static final String NOTIFY_ONLINE = "notifyOnline";
 
     public static final String STOP_SCHEDULED = "stopScheduled";
+
+    public static final String START_SCHEDULED = "startScheduled";
 
     public static final String NOTIFY_ONLINE_MESSAGE = "账号已在其他地方登录！";
 

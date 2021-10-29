@@ -76,5 +76,10 @@ public class RedisReceiver {
         scheduledTask.endTask(Integer.valueOf(message));
     }
 
+    public void startScheduled(String message){
+        log.info(message);
+        scheduledTask.startTask(Integer.valueOf(message));
+    }
+
 
 }

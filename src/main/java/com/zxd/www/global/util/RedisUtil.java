@@ -591,8 +591,8 @@ public class RedisUtil {
     }
 
 
-    public boolean setIfAbsent(final String key, String value){
-        return Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(key, value, RedisConstant.LOCK_KEY_TIME, TimeUnit.SECONDS));
+    public boolean setIfAbsent(final String key, String value, long time){
+        return Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(key, value, time, TimeUnit.SECONDS));
     }
 
 }

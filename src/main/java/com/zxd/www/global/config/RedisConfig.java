@@ -65,6 +65,8 @@ public class RedisConfig {
         container.addMessageListener(messageNotifyOnlineAdapter(), new PatternTopic(WebSocketConstant.NOTIFY_ONLINE_CHANNEL));
         // 监听关闭定时器
         container.addMessageListener(messageStopScheduledTask(), new PatternTopic(WebSocketConstant.STOP_SCHEDULED_CHANNEL));
+        // 监听开启定时器
+        container.addMessageListener(messageStartScheduledTask(), new PatternTopic(WebSocketConstant.START_SCHEDULED_CHANNEL));
         return container;
     }
 
@@ -90,6 +92,11 @@ public class RedisConfig {
     @Bean
     public MessageListenerAdapter messageStopScheduledTask(){
         return new MessageListenerAdapter(redisReceiver, WebSocketConstant.STOP_SCHEDULED);
+    }
+
+    @Bean
+    public MessageListenerAdapter messageStartScheduledTask(){
+        return new MessageListenerAdapter(redisReceiver, WebSocketConstant.START_SCHEDULED);
     }
 
 }

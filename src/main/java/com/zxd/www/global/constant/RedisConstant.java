@@ -21,5 +21,10 @@ public class RedisConstant {
      */
     public static final long LOCK_KEY_TIME = 2L;
 
+    /**
+     * 定时任务锁
+     */
+    public static final long LOCK_SCHEDULED_TIME = 5L;
+
 
 }

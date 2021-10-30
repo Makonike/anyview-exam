@@ -10,6 +10,12 @@ public class WebSocketConstant {
 
     public static final String SEND_ONE_CHANNEL = "channel:sendOne";
 
+    public static final String NOTIFY_ONLINE_CHANNEL = "channel:notifyOnline";
+
+    public static final String STOP_SCHEDULED_CHANNEL = "channel:stopScheduled";
+
+    public static final String START_SCHEDULED_CHANNEL = "channel:startScheduled";
+
     public static final String MESSAGE_TYPE_SEND_ONE = "sendOne";
 
     public static final String MESSAGE_TYPE_SEND_ALL = "sendAll";
@@ -18,9 +24,19 @@ public class WebSocketConstant {
 
     public static final String GROUP_ID = "groupId";
 
+    public static final String ADMIN_GROUP_ID = "admin group";
+
     public static final String SEND_ONE_METHOD_NAME = "sendMsg";
 
     public static final String SEND_ALL_METHOD_NAME = "sendAllMsg";
+
+    public static final String NOTIFY_ONLINE = "notifyOnline";
+
+    public static final String STOP_SCHEDULED = "stopScheduled";
+
+    public static final String START_SCHEDULED = "startScheduled";
+
+    public static final String NOTIFY_ONLINE_MESSAGE = "账号已在其他地方登录！";
 
 
 

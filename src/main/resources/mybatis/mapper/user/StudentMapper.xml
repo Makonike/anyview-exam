@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.www.user.mapper.StudentMapper">
+
+    <!-- boolean insertStudent(Student student); -->
+    <insert id="insertStudent" parameterType="com.zxd.www.user.entity.Student" useGeneratedKeys="true" keyProperty="studentId">
+        insert into `t_student`
+        (`student_id`, `user_id`, `student_no`, `student_name`, `gender`, `class_id`)
+        values(#{studentId}, #{userId}, #{studentNo}, #{studentName}, #{gender}, #{classId})
+    </insert>
+
+    <!-- boolean updateStudent(Student student); -->
+    <update id="updateStudent" parameterType="com.zxd.www.user.entity.Student">
+        update `t_student`
+        set `student_name` = #{studentName}, `gender` = #{gender}, `class_id` = #{classId}
+        where `student_id` = #{studentId}
+        and `removed` = 0
+    </update>
+
+    <!-- boolean deleteById(Integer studentId); -->
+    <update id="deleteById">
+        update `t_student`
+        set `removed` = 1
+        where `student_id` = #{studentId}
+        and `removed` = 0
+    </update>
+
+    <!-- Student selectByStudentNo(String studentNo); -->
+    <select id="selectByStudentNo" resultType="com.zxd.www.user.entity.Student">
+        select `student_id`, `user_id`,`student_no`, `student_name`, `student_name`, `gender`, ts.`class_id`, tc.`class_name`,
+                ts.`create_time`
+        from `t_student` ts
+        left join `t_class` tc
+        on ts.`class_id` = tc.`class_id`
+        where `student_no` = #{studentNo}
+        and ts.`removed` = 0
+    </select>
+
+    <!-- Student selectByStudentId(Integer studentId); -->
+    <select id="selectByStudentId" resultType="com.zxd.www.user.entity.Student">
+        select `student_id`, `user_id`,`student_no`, `student_name`, `student_name`, `gender`, ts.`class_id`, tc.`class_name`,
+               ts.`create_time`
+        from `t_student` ts
+        left join `t_class` tc
+        on ts.`class_id` = tc.`class_id`
+        where `student_id` = #{studentId}
+        and ts.`removed` = 0
+    </select>
+
+    <!-- List<Student> getStudentList(); -->
+    <select id="getStudentList" resultType="com.zxd.www.user.entity.Student">
+        select `student_id`, `user_id`,`student_no`, `student_name`, `student_name`, `gender`, ts.`class_id`, tc.`class_name`,
+               ts.`create_time`
+        from `t_student` ts
+        left join `t_class` tc
+        on ts.`class_id` = tc.`class_id`
+        where ts.`removed` = 0
+    </select>
+
+
+</mapper>

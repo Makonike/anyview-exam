@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.www.exam.mapper.QuestionBandMapper">
+
+    <!-- boolean insert(QuestionBand questionBand); -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="questionBandId">
+        insert into `t_question_band`
+        (`question_band_id`, `question_band_name`)
+        values(#{questionBandId}, #{questionBandName})
+    </insert>
+
+    <!-- void update(Integer questionBandId); -->
+    <update id="update">
+        update `t_question_band`
+        set `removed` = 0
+        where `question_band_id` = #{questionBandId}
+        and `removed` = 0
+    </update>
+
+    <!-- boolean updateName(QuestionBand questionBand); -->
+    <update id="updateName">
+        update `t_question_band`
+        set `question_band_name` = #{questionBandName}
+        where `question_band_id` = #{questionBandId}
+        and `removed` = 0
+    </update>
+
+    <!-- boolean delete(Integer questionBandId); -->
+    <delete id="delete">
+        update `t_question_band`
+        set `removed` = 1
+        where `question_band_id` = #{questionBandId}
+        and `removed` = 0
+    </delete>
+
+    <!-- List<QuestionBand> selectList(); -->
+    <select id="selectList" resultType="com.zxd.www.exam.entity.QuestionBand">
+        select `question_band_id`, `question_band_name`, `create_time`, `update_time`
+        from `t_question_band`
+        where `removed` = 0
+        order by `update_time` desc
+    </select>
+
+
+</mapper>

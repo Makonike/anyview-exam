@@ -1,5 +1,7 @@
 package com.zxd.www.websocket.handler.impl;
 
+import com.zxd.www.clazz.service.ClassService;
+import com.zxd.www.global.constant.CommonConstant;
 import com.zxd.www.websocket.bean.WebSocketBean;
 import com.zxd.www.websocket.config.WsSessionManager;
 import com.zxd.www.websocket.constant.WebSocketConstant;
@@ -14,6 +16,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -36,6 +39,9 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
     @Autowired
     private WebSocketService webSocketService;
 
+    @Autowired
+    private ClassService classService;
+
     /**
      * 在 socket 连接成功后被触发，同原生注解里的 @OnOpen 功能
      * @param session session
@@ -50,15 +56,12 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
         // 如果存在则加入
         if(beanMap != null){
             WebSocketBean stu = beanMap.get(userId);
-            //
             if(stu == null){
                 // 如果客户端未连接
                 beanMap.put(userId, bean);
                 log.info("组别：groupId:" + groupId + "，客户端userId:" + userId + "，连接服务器，当前连接数为：" + countUser(groupId));
-            } else {
-                // 如果客户端已连接，则不重复连接
-                log.info("组别groupId：" + groupId + "，客户端userId:" + userId + "，重复登录！");
-            }
+            }  // 如果客户端已连接，则不重复连接
+
         } else {
             // 不存在则创建
             // 用户id+session
@@ -66,7 +69,7 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
             cMap.put(userId, bean);
             // 组别id+map
             WsSessionManager.add(groupId, cMap);
-            log.info("组别：groupId:" + groupId + "，客户端userId:" + userId + "，连接服务器，当前连接数为：" + countUser(groupId));
+            log.info("组别groupId:" + groupId + "，客户端userId:" + userId + "，连接服务器，当前连接数为：" + countUser(groupId));
         }
 
     }
@@ -80,28 +83,20 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         String groupId = (String) session.getAttributes().get(WebSocketConstant.GROUP_ID);
         String userId = (String) session.getAttributes().get(WebSocketConstant.USER_ID);
+        // 心跳机制
+        if(CommonConstant.PING.equals(message.getPayload())){
+            sendMessageById(groupId, userId, CommonConstant.PONG);
+            return ;
+        }
         log.info("组别groupId:" + groupId + "，连接数：" + countUser(groupId) + "，发送消息：" + message);
         try{
-            // 发送消息
+            // 发送消息，这里指的是 老师向学生客户端发送公告
             if(session.isOpen()){
-                // TODO: 备份至mysql
-                Map<String, WebSocketBean> sMap = WsSessionManager.get(groupId);
-                // 先判断本服务器端有无该用户session，如果有，则直接发，没有则广播session
-                if(sMap.containsKey(userId)){
-                    if(Objects.equals(groupId, userId)){
-                        batchSendMessage(groupId, message.getPayload());
-                    } else {
-                        sendMessageById(groupId, userId, message.getPayload());
-                    }
-                } else {
-                    // 如果groupId与userId相同就群发，否则单发
-                    if(Objects.equals(groupId, userId)){
-                        webSocketService.sendMessageAll(groupId, message.getPayload());
-                    } else {
-                        webSocketService.sendMessageById(groupId, userId, message.getPayload());
-                    }
+                List<Integer> examClass = classService.getExamClass(Integer.parseInt(userId));
+                // 向参与测试的班级群发消息
+                for (Integer aClass : examClass) {
+                    webSocketService.sendMessageAll(aClass.toString(), message.getPayload());
                 }
-
             }
             // 清空错误计数
             cleanErrorNum(groupId, userId);
@@ -132,10 +127,6 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
         String groupId = (String) session.getAttributes().get(WebSocketConstant.GROUP_ID);
         Map<String, WebSocketBean> map = WsSessionManager.get(groupId);
 
-        // 清空session
-//        if(remove){
-//            log.info("组别groupId:" + groupId + "客户端userId：" + userId +"，断开与服务器连接");
-//        }
         // 学生关闭客户端
         if(map != null){
             WebSocketBean remove = map.remove(userId);
@@ -154,16 +145,16 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) {
         exception.printStackTrace();
-//        String userId = (String) session.getAttributes().get("userId");
-//        String groupId = (String) session.getAttributes().get("groupId");
-//        log.error("websocket发生错误==组别：" + groupId + "，客户端userId:" + userId, exception.getMessage());
+        String userId = (String) session.getAttributes().get("userId");
+        String groupId = (String) session.getAttributes().get("groupId");
+        log.error("websocket发生错误==组别：" + groupId + "，客户端userId:" + userId, exception.getMessage());
     }
 
     /**
-     * 计算当前连接数
+     * 计算当前服务器上的连接数
      * @param groupId groupId
      */
-    private Integer countUser(String groupId){
+    public synchronized Integer countUser(String groupId){
         int size = 0;
         Map<String,WebSocketBean> cMap = WsSessionManager.get(groupId);
         if(cMap != null){
@@ -225,7 +216,6 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
     }
 
     /**
-     * TODO: 发送者id和接收者id
      * 对某个用户发消息
      * @param groupId groupId
      * @param userId 接收者id

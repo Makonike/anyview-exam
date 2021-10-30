@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.www.clazz.mapper.SchoolMapper">
+
+    <!-- boolean insert(SchoolEntity schoolEntity); -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="schoolId">
+        insert into `t_school`
+        (`school_id`, `school_name`)
+        values(#{schoolId}, #{schoolName})
+    </insert>
+
+    <!-- boolean delete(Integer schoolId); -->
+    <update id="delete">
+        update `t_school`
+        set `removed` = 1
+        where `school_id` = #{schoolId}
+        and `removed` = 0
+    </update>
+
+    <!-- boolean update(SchoolEntity schoolEntity); -->
+    <update id="update">
+        update `t_school`
+        set `school_name` = #{schoolName}
+        where `school_id` = #{schoolId}
+        and `removed` = 0
+    </update>
+
+    <!-- SchoolEntity selectById(Integer schoolId); -->
+    <select id="selectById" resultType="com.zxd.www.clazz.entity.SchoolEntity">
+        select `school_id`, `school_name`
+        from `t_school`
+        where `school_id` = #{schoolId}
+        and `removed` = 0
+    </select>
+
+    <!-- List<SchoolEntity> selectList(); -->
+    <select id="selectList" resultType="com.zxd.www.clazz.entity.SchoolEntity">
+        select `school_id`, `school_name`
+        from `t_school`
+        where `removed` = 0
+    </select>
+
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.www.sys.mapper.SysRoleMapper">
+
+    <!-- List<String> selectById(Integer adminId); -->
+    <select id="selectById" resultType="java.lang.String">
+        select `role_name`
+        from `t_role` tr
+        left join `conn_admin_role` car
+        on tr.`role_id` = car.`role_id`
+        where car.`admin_id` = #{adminId}
+    </select>
+
+    <!-- List<String> selectList(); -->
+    <select id="selectList" resultType="java.lang.String">
+        select `role_name`
+        from `t_role`
+    </select>
+
+</mapper>

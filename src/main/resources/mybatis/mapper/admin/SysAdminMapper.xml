@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.www.sys.mapper.SysAdminMapper">
+
+
+    <!-- boolean insert(SysAdminEntity admin); -->
+    <insert id="insert" parameterType="com.zxd.www.sys.entity.SysAdminEntity"  useGeneratedKeys="true" keyProperty="adminId">
+        insert into `t_admin`
+        (`admin_id`, `admin_name`, `admin_password`, `salt`)
+        values (#{adminId}, #{adminName}, #{adminPassword}, #{salt})
+    </insert>
+
+    <!-- boolean delete(Integer adminId); -->
+    <delete id="delete" parameterType="Integer">
+        delete from `t_admin`
+        where `admin_id` = #{adminId}
+    </delete>
+
+
+    <!-- List<SysAdminEntity> selectList(); -->
+    <select id="selectList" resultType="com.zxd.www.sys.entity.SysAdminEntity">
+        select `admin_id`, `admin_name`
+        from `t_admin`
+    </select>
+
+    <!-- SysAdminEntity selectByAdminId(Integer adminId); -->
+    <select id="selectByAdminId" resultType="com.zxd.www.sys.entity.SysAdminEntity" parameterType="Integer">
+        select `admin_id`, `admin_name`, `admin_password`, `salt`
+        from `t_admin`
+        where `admin_id` = #{adminId}
+    </select>
+
+    <!-- SysAdminEntity selectByAdminName(String adminName); -->
+    <select id="selectByAdminName" resultType="com.zxd.www.sys.entity.SysAdminEntity" parameterType="String">
+        select `admin_id`, `admin_name`, `admin_password`, `salt`
+        from `t_admin`
+        where `admin_name` = #{adminName}
+    </select>
+
+    <!-- Integer findRoleAdminByAdminId(Integer adminId); -->
+    <select id="findRoleAdminByAdminId" resultType="java.lang.Integer">
+        select `admin_role_id`
+        from `conn_admin_role`
+        where `admin_id` = #{adminId}
+        and `role_id` = 1
+    </select>
+
+    <!-- boolean update(SysAdminEntity admin); -->
+    <update id="update">
+        update `t_admin`
+        set `admin_Password` = #{adminPassword}, `salt` = #{salt}
+        where `admin_id` = #{adminId}
+    </update>
+
+    <!-- boolean bindRoleToAdmin(Integer adminId, Integer roleId); -->
+    <insert id="bindRoleToAdmin">
+        insert into `conn_admin_role`
+        (`admin_id`, `role_id`)
+        values(#{adminId}, #{roleId})
+    </insert>
+
+</mapper>

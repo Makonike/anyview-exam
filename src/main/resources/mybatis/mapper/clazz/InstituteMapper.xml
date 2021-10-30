@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.www.clazz.mapper.InstituteMapper">
+
+    <!-- boolean insert(InstituteEntity instituteEntity); -->
+    <insert id="insert">
+        insert into `t_institute`
+        (`institute_id`, `institute_name`)
+        values(#{instituteId}, #{instituteName})
+    </insert>
+
+    <!-- boolean delete(Integer instituteId); -->
+    <update id="delete">
+        update `t_institute`
+        set `removed` = 1
+        where `institute_id` = #{instituteId}
+        and `removed` = 0
+    </update>
+
+    <!-- boolean update(InstituteEntity instituteEntity); -->
+    <update id="update">
+        update `t_institute`
+        set `institute_name` = #{instituteName}
+        where `institute_id` = #{instituteId}
+        and `removed` = 0
+    </update>
+
+    <!-- InstituteEntity selectById(Integer instituteId); -->
+    <select id="selectById" resultType="com.zxd.www.clazz.entity.InstituteEntity">
+        select `institute_id`, `institute_name`
+        from `t_institute`
+        where `institute_id` = #{instituteId}
+        and `removed` = 0
+    </select>
+
+    <!-- List<InstituteEntity> selectList(); -->
+    <select id="selectList" resultType="com.zxd.www.clazz.entity.InstituteEntity">
+        select `institute_id`, `institute_name`
+        from `t_institute`
+        where `removed` = 0
+    </select>
+
+</mapper>

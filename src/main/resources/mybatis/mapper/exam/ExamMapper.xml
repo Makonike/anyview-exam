@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.www.exam.mapper.ExamMapper">
+    <resultMap id="examMap" type="com.zxd.www.exam.entity.Exam">
+        <id column="exam_id" property="examId" jdbcType="INTEGER"/>
+        <result column="exam_name" property="examName" jdbcType="VARCHAR"/>
+        <result column="teacher_id" property="teacherId" jdbcType="INTEGER"/>
+        <result column="table_id" property="questionTableId" jdbcType="INTEGER"/>
+        <result column="setup_time" property="setupTime" jdbcType="DATETIMEOFFSET"/>
+        <result column="start_time" property="startTime" jdbcType="DATETIMEOFFSET"/>
+        <result column="exam_time" property="examTime" jdbcType="INTEGER"/>
+        <result column="exp_time" property="expTime" jdbcType="DATETIMEOFFSET"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <collection property="classIds" ofType="INTEGER" javaType="java.util.List">
+            <constructor>
+                <arg column="class_id"/>
+            </constructor>
+        </collection>
+    </resultMap>
+
+    <!-- boolean autoExamSave(Exam exam); -->
+    <update id="autoExamSave" parameterType="com.zxd.www.exam.entity.Exam">
+        update `t_exam`
+        set `setup_time` = #{setupTime},`start_time` = #{startTime},`exam_time` = #{examTime}, `exp_time` = #{expTime}
+        where `exam_id` = #{examId}
+        and `status` = 0
+    </update>
+
+    <!-- boolean examSave(Exam exam); -->
+    <insert id="examSave" useGeneratedKeys="true" keyProperty="examId" parameterType="com.zxd.www.exam.entity.Exam">
+        insert into `t_exam`
+        (`exam_id`,`exam_name`, `table_id`, `teacher_id`)
+        values(#{examId}, #{examName}, #{questionTableId}, #{teacherId})
+    </insert>
+
+    <!-- boolean examSetUp(Exam exam); -->
+    <update id="examSetUp" parameterType="com.zxd.www.exam.entity.Exam">
+        update `t_exam`
+        set `setup_time` = #{setupTime}, `start_time` = #{startTime}, `exam_time` = #{examTime}, `exp_time` = #{expTime}, `status` = 1
+        where `exam_id` = #{examId}
+        and `status` = 0
+    </update>
+
+    <!-- boolean examStart(Exam exam); -->
+    <update id="examStart" parameterType="com.zxd.www.exam.entity.Exam">
+        update `t_exam`
+        set `status` = 2, `start_time` = #{startTime}, `exp_time` = #{expTime}
+        where `exam_id` = #{examId}
+        and `status` = 1
+    </update>
+
+    <!-- boolean examStop(Exam exam) -->
+    <update id="examStop" parameterType="com.zxd.www.exam.entity.Exam">
+        update `t_exam`
+        set `status` = 3, `exam_time` = #{examTime} , `exp_time` = #{expTime}
+        where `exam_id` = #{examId}
+        and `status` in (1, 2)
+    </update>
+
+    <!-- boolean examDelay(Exam exam); -->
+    <update id="examDelay" parameterType="com.zxd.www.exam.entity.Exam">
+        update `t_exam`
+        set `exam_time` = #{examTime}, `exp_time` = #{expTime}
+        where `exam_id` = #{examId}
+        and `status` = 2
+    </update>
+
+    <!-- boolean autoExamStart(Integer examId); -->
+    <update id="autoExamStart">
+        update `t_exam`
+        set `status` = 2
+        where `exam_id` = #{examId}
+        and `status` = 1
+    </update>
+
+    <!-- boolean autoExamStop(Integer examId); -->
+    <update id="autoExamStop">
+        update `t_exam`
+        set `status` = 3
+        where `exam_id` = #{examId}
+        and `status` = 2
+    </update>
+
+    <!-- boolean autoExamSetUp(Integer examId); -->
+    <update id="autoExamSetUp">
+        update `t_exam`
+        set `status` = 1
+        where `exam_id` = #{examId}
+        and `status` = 0
+    </update>
+
+    <!-- void update(Exam exam); -->
+    <update id="update">
+        update `t_exam`
+        set `table_id` = #{questionTableId}, `exam_name` = #{examName}
+        where `exam_id` = #{examId}
+        and `status` = 0
+    </update>
+
+    <!-- Exam getByExamId(Integer examId); -->
+    <select id="getByExamId" resultMap="examMap">
+        select te.`exam_id`, `table_id`, `exam_name`, `teacher_id`, `setup_time`, `start_time`, `exam_time`, `exp_time`, `status`,
+               cec.`class_id`
+        from `t_exam` te
+        left join `conn_exam_class` cec
+        on te.`exam_id` = cec.`exam_id`
+        where te.`exam_id` = #{examId}
+    </select>
+
+    <!-- Integer countExamPeriod(Integer classId, LocalDateTime setupTime, LocalDateTime expTime); -->
+    <select id="countExamPeriod" resultType="java.lang.Integer">
+        SELECT count(te.`exam_id`)
+        FROM `t_exam` te
+        left join `conn_exam_class` cec
+        on te.`exam_id` = cec.`exam_id`
+        where cec.`class_id` = #{classId}
+        and te.`status` in (0, 1, 2)
+        and ((TIMESTAMPDIFF(SECOND, te.`setup_time`, #{setupTime}) &lt;= 0
+        and TIMESTAMPDIFF(SECOND, te.`exp_time`, #{expTime}) &gt;= 0)
+        or #{setupTime} BETWEEN te.`setup_time` and te.`exp_time`
+        or #{expTime} BETWEEN te.`setup_time` and te.`exp_time`)
+    </select>
+
+    <!-- Exam getByUserId(Integer userId); -->
+    <select id="getByUserId" resultType="com.zxd.www.exam.entity.Exam">
+        select te.`exam_id`, `exam_name`, `table_id` questionTableId, `teacher_id`, `setup_time`, `start_time`
+        , `exp_time`, `exam_time`, `status`
+        from `t_exam` te
+        left join `conn_exam_class` cec
+        on cec.`exam_id` = te.`exam_id`
+        left join `t_student` ts
+        on cec.`class_id` = ts.`class_id`
+        where ts.`user_id` = #{userId}
+        and te.`status` in (1, 2)
+    </select>
+
+    <!-- List<Exam> selectExamList(Integer teacherId); -->
+    <select id="selectExamList" resultType="com.zxd.www.exam.entity.Exam">
+        select `exam_id`, `exam_name`, `table_id` questionTableId, `teacher_id`, `setup_time`, `start_time`
+             , `exp_time`, `exam_time`, `status`
+        from `t_exam`
+        where `teacher_id` = #{teacherId}
+    </select>
+
+
+</mapper>

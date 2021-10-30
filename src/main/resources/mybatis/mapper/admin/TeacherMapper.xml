@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.www.sys.mapper.TeacherMapper">
+
+    <!-- boolean save(Teacher teacher); -->
+    <insert id="save" parameterType="com.zxd.www.sys.entity.Teacher" useGeneratedKeys="true" keyProperty="teacherId">
+        insert into `t_teacher`
+        (`teacher_id`, `admin_id`, `teacher_name`, `gender`)
+        values(#{teacherId}, #{adminId}, #{teacherName}, #{gender})
+    </insert>
+
+    <!-- boolean update(Teacher teacher); -->
+    <update id="update" parameterType="com.zxd.www.sys.entity.Teacher">
+        update `t_teacher`
+        set `teacher_name` = #{teacherName}, `gender` = #{gender}
+        where `teacher_id` = #{teacherId}
+        and `removed` = 0
+    </update>
+
+    <!-- boolean deleteById(Integer teacherId); -->
+    <update id="deleteById" parameterType="Integer">
+        update `t_teacher`
+        set `removed` = 1
+        where `teacher_id` = #{teacherId}
+        and `removed` = 0
+    </update>
+
+    <!-- boolean deleteTeacherRole(Integer adminId); -->
+    <delete id="deleteTeacherRole">
+        delete from `conn_admin_role`
+        where `admin_id` = adminId
+        and `role_id` = 2
+    </delete>
+
+    <!-- Teacher selectByTeacherId(Integer teacherId); -->
+    <select id="selectByTeacherId" resultType="com.zxd.www.sys.entity.Teacher" parameterType="Integer">
+        select `teacher_id`, `admin_id`, `teacher_name`, `gender`
+                ,`create_time`
+        from `t_teacher`
+        where `teacher_id` = #{teacherId}
+        and `removed` = 0
+    </select>
+
+    <!-- Teacher selectByAdminId(Integer adminId); -->
+    <select id="selectByAdminId" resultType="com.zxd.www.sys.entity.Teacher" parameterType="Integer">
+        select `teacher_id`, `admin_id`, `teacher_name`, `gender`
+             ,`create_time`
+        from `t_teacher`
+        where `admin_id` = #{adminId}
+        and `removed` = 0
+    </select>
+
+    <!-- List<Teacher> selectList(); -->
+    <select id="selectList" resultType="com.zxd.www.sys.entity.Teacher">
+        select `teacher_id`, `admin_id`, `teacher_name`, `gender`
+             ,`create_time`
+        from `t_teacher`
+        where `removed` = 0
+    </select>
+
+</mapper>

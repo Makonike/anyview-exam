@@ -21,4 +21,23 @@ public interface WebSocketService {
      * @param message 消息
      */
     void sendMessageById(String groupId, String userId, String message);
+
+    /**
+     * 单点登录
+     * @param groupId groupId
+     * @param userId userId
+     */
+    void notifyOnline(String groupId, String userId);
+
+    /**
+     * 关闭定时器
+     * @param message 测验id
+     */
+    void sendStopSchedulerMessage(String message);
+
+    /**
+     * 开启定时器
+     * @param message 测验id
+     */
+    void sendStartSchedulerMessage(String message);
 }

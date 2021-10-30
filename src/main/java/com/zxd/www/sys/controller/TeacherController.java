@@ -23,9 +23,9 @@ public class TeacherController {
      * @param teacher teacher
      * @param adminId adminId
      */
-    @PostMapping("/save")
+    @PostMapping("/save/{adminId}")
     @RequiresPermissions(value = "sys:teacher:save")
-    public JsonResponse save(@RequestBody Teacher teacher, @RequestParam("adminId") Integer adminId){
+    public JsonResponse save(@RequestBody Teacher teacher, @PathVariable("adminId") Integer adminId){
         if(teacherService.getByAdminId(adminId) != null){
             return new JsonResponse().unauthorized().message("该管理员已绑定信息！");
         }

@@ -25,6 +25,13 @@
         and `removed` = 0
     </update>
 
+    <!-- boolean deleteTeacherRole(Integer adminId); -->
+    <delete id="deleteTeacherRole">
+        delete from `conn_admin_role`
+        where `admin_id` = adminId
+        and `role_id` = 2
+    </delete>
+
     <!-- Teacher selectByTeacherId(Integer teacherId); -->
     <select id="selectByTeacherId" resultType="com.zxd.www.sys.entity.Teacher" parameterType="Integer">
         select `teacher_id`, `admin_id`, `teacher_name`, `gender`

@@ -44,7 +44,11 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public boolean deleteById(Integer teacherId) {
-        return teacherMapper.deleteById(teacherId);
+        Teacher teacher = getByTeacherId(teacherId);
+        if (teacherMapper.deleteById(teacherId)) {
+            return teacherMapper.deleteTeacherRole(teacher.getAdminId());
+        }
+        return false;
     }
 
     @Override

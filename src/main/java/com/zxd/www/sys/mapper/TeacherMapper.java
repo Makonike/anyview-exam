@@ -24,4 +24,6 @@ public interface TeacherMapper {
 
     List<Teacher> selectList();
 
+    boolean deleteTeacherRole(Integer adminId);
+
 }

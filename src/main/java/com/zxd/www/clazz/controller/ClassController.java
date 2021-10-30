@@ -3,6 +3,7 @@ package com.zxd.www.clazz.controller;
 import com.zxd.www.clazz.entity.ClassEntity;
 import com.zxd.www.clazz.service.ClassService;
 import com.zxd.www.global.entity.dto.JsonResponse;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,17 +19,10 @@ public class ClassController {
     private ClassService classService;
 
     @GetMapping("/list")
-    public JsonResponse teacherGetList(){
-        return new JsonResponse().data(classService.getListByTeacher());
-    }
-
-    @GetMapping("/get")
-    public JsonResponse getList(){
-        return new JsonResponse().data(classService.getList());
-    }
-
-    @GetMapping("/admin/list")
     public JsonResponse adminGetList(){
+        if (SecurityUtils.getSubject().hasRole("teacher")) {
+            return new JsonResponse().data(classService.getListByTeacher());
+        }
         return new JsonResponse().data(classService.getList());
     }
 

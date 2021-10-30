@@ -90,9 +90,8 @@ public class HttpAuthHandler extends TextWebSocketHandler implements WebsocketEn
         }
         log.info("组别groupId:" + groupId + "，连接数：" + countUser(groupId) + "，发送消息：" + message);
         try{
-            // 发送消息，这里指的是 老师向学生客户端发送公告 TODO:设计为接口, 然后onMessage就打算只用来做心跳机制返回pong
+            // 发送消息，这里指的是 老师向学生客户端发送公告
             if(session.isOpen()){
-                // TODO: 备份至mysql
                 List<Integer> examClass = classService.getExamClass(Integer.parseInt(userId));
                 // 向参与测试的班级群发消息
                 for (Integer aClass : examClass) {

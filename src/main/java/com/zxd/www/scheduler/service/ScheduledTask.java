@@ -72,8 +72,6 @@ public class ScheduledTask {
                 if(requestId.equals(redisUtil.get(".lock" + examId))){
                     scheduledTaskService.examStartSendMessage(examId);
                     redisUtil.expire(".lock" + examId, RedisConstant.LOCK_SCHEDULED_TIME);
-                } else {
-                    log.info("===" + requestId + "执行空的定时任务===");
                 }
             }
             // 每五秒发送一次

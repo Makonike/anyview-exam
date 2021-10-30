@@ -76,4 +76,20 @@ public class CourseController {
     public JsonResponse getByClassId(@PathVariable("classId") Integer classId){
         return new JsonResponse().data(courseService.getByClassId(classId));
     }
+
+    @DeleteMapping("/delete/teacher/{teacherId}/{courseId}")
+    public JsonResponse deleteTeacherCourse(@PathVariable("courseId") Integer courseId, @PathVariable("teacherId") Integer teacherId){
+        if (courseService.deleteTeacherCourse(courseId, teacherId)) {
+            return new JsonResponse();
+        }
+        return new JsonResponse().badRequest().message("删除失败！");
+    }
+
+    @DeleteMapping("/delete/class/{classId}/{courseId}")
+    public JsonResponse deleteClassCourse(@PathVariable("courseId") Integer cousreId, @PathVariable("classId") Integer classId){
+        if (courseService.deleteClassCourse(cousreId, classId)) {
+            return new JsonResponse();
+        }
+        return new JsonResponse().badRequest().message("删除失败！");
+    }
 }

@@ -28,4 +28,8 @@ public interface CourseService {
 
     boolean update(CourseEntity courseEntity);
 
+    boolean deleteTeacherCourse(Integer courseId, Integer teacherId);
+
+    boolean deleteClassCourse(Integer courseId, Integer classId);
+
 }

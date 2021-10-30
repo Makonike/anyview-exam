@@ -92,4 +92,14 @@ public class CourseServiceImpl implements CourseService {
     public boolean update(CourseEntity courseEntity) {
         return courseMapper.update(courseEntity);
     }
+
+    @Override
+    public boolean deleteTeacherCourse(Integer courseId, Integer teacherId) {
+        return courseMapper.deleteCourseTeacher(courseId, teacherId);
+    }
+
+    @Override
+    public boolean deleteClassCourse(Integer courseId, Integer classId) {
+        return courseMapper.deleteCourseClass(courseId, classId);
+    }
 }

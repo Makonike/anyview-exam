@@ -25,6 +25,19 @@
         and `removed` = 0
     </update>
 
+
+    <delete id="deleteCourseTeacher">
+        delete from `conn_course_teacher`
+        where `teahcer_id` = #{teacherId}
+        and `coure_id` = #{courseId}
+    </delete>
+
+    <delete id="deleteCourseClass">
+        delete from `conn_course_class`
+        where `class_id` = #{classId}
+        and `coure_id` = #{courseId}
+    </delete>
+
     <!-- boolean connCourseToTeacher(Integer courseId, Integer teacherId); -->
     <insert id="connCourseToTeacher">
         insert into `conn_course_teacher`

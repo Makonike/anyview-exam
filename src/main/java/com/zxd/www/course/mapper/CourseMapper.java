@@ -30,4 +30,8 @@ public interface CourseMapper {
     List<CourseEntity> getByTeacherId(Integer teacherId);
 
     List<CourseEntity> getByClassId(Integer classId);
+
+    boolean deleteCourseTeacher(@Param("courseId") Integer courseId, @Param("teacherId") Integer teacherId);
+
+    boolean deleteCourseClass(@Param("courseId") Integer courseId, @Param("classId") Integer classId);
 }

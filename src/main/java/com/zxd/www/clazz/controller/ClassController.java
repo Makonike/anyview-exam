@@ -20,10 +20,10 @@ public class ClassController {
 
     @GetMapping("/list")
     public JsonResponse adminGetList(){
-        if (SecurityUtils.getSubject().hasRole("teacher")) {
-            return new JsonResponse().data(classService.getListByTeacher());
+        if (SecurityUtils.getSubject().hasRole("admin")) {
+            return new JsonResponse().data(classService.getList());
         }
-        return new JsonResponse().data(classService.getList());
+        return new JsonResponse().data(classService.getListByTeacher());
     }
 
     @GetMapping("/admin/get/{classId}")
